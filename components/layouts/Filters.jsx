@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import StarRatings from "react-star-ratings";
 import { useRouter } from "next/navigation";
 import { getPriceQueryParams } from "@/helpers/helpers";
 
@@ -62,7 +61,6 @@ const Filters = () => {
     }
   }
 
-  console.log(showFilters);
   return (
     <aside className="md:w-1/3 lg:w-1/4 px-4">
       <button
@@ -183,37 +181,6 @@ const Filters = () => {
               />
               <span className="ml-2 text-gray-500"> Beauty </span>
             </label>
-          </li>
-        </ul>
-
-        <hr className="my-4" />
-
-        <h3 className="font-semibold mb-2">Ratings</h3>
-        <ul className="space-y-1">
-          <li>
-            {[5, 4, 3, 2, 1].map((rating) => (
-              <label key={rating} className="flex items-center">
-                <input
-                  name="ratings"
-                  type="checkbox"
-                  value={rating}
-                  className="h-4 w-4"
-                  defaultChecked={checkHandler("ratings", `${rating}`)}
-                  onClick={(e) => handleClick(e.target)}
-                />
-                <span className="ml-2 text-gray-500">
-                  {" "}
-                  <StarRatings
-                    rating={rating}
-                    starRatedColor="#ffb829"
-                    numberOfStars={5}
-                    starDimension="20px"
-                    starSpacing="2px"
-                    name="rating"
-                  />{" "}
-                </span>
-              </label>
-            ))}
           </li>
         </ul>
       </div>

@@ -47,26 +47,7 @@ const productSchema = new mongoose.Schema({
     type: Number,
     required: [true, "Please enter product stock"],
   },
-  ratings: {
-    type: Number,
-    default: 0,
-  },
-  reviews: [
-    {
-      rating: {
-        type: Number,
-        required: true,
-      },
-      comment: {
-        type: String,
-        required: true,
-      },
-      createdAt: {
-        type: Date,
-        default: Date.now,
-      },
-    },
-  ],
+
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",

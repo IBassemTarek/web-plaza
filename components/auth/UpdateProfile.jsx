@@ -10,8 +10,6 @@ const UpdateProfile = () => {
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [avatar, setAvatar] = useState("");
-  const [avatarPreview, setAvatarPreview] = useState("/images/default.png");
 
   useEffect(() => {
     if (user) {
@@ -28,25 +26,10 @@ const UpdateProfile = () => {
   const submitHandler = (e) => {
     e.preventDefault();
 
-    const formData = new FormData();
-    formData.set("name", name);
-    formData.set("email", email);
-    formData.set("image", avatar);
-
-    updateProfile(formData);
-  };
-
-  const onChange = (e) => {
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        setAvatarPreview(reader.result);
-      }
-    };
-
-    setAvatar(e.target.files[0]);
-    reader.readAsDataURL(e.target.files[0]);
+    updateProfile({
+      name,
+      email,
+    });
   };
 
   return (
@@ -80,23 +63,6 @@ const UpdateProfile = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-          </div>
-
-          <div className="mb-4">
-            <label className="block mb-1"> Avatar </label>
-            <div className="mb-4 flex flex-col md:flex-row">
-              <div className="flex items-center mb-4 space-x-3 mt-4 cursor-pointer md:w-1/5 lg:w-1/4">
-                <img className="w-14 h-14 rounded-full" src={avatarPreview} />
-              </div>
-              <div className="md:w-2/3 lg:w-80">
-                <input
-                  className="form-control block w-full px-2 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none mt-6"
-                  type="file"
-                  id="formFile"
-                  onChange={onChange}
-                />
-              </div>
-            </div>
           </div>
 
           <button

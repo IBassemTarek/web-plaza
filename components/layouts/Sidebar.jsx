@@ -36,27 +36,6 @@ const Sidebar = () => {
                 All Products <span className="text-red-500">(Admin)</span>
               </Link>
             </li>
-
-            <li>
-              {" "}
-              <Link
-                href="/admin/orders"
-                className="block px-3 py-2 text-gray-800 hover:bg-black hover:text-white rounded-md"
-              >
-                All Orders <span className="text-red-500">(Admin)</span>
-              </Link>
-            </li>
-
-            <li>
-              {" "}
-              <Link
-                href="/admin/users"
-                className="block px-3 py-2 text-gray-800 hover:bg-black hover:text-white rounded-md"
-              >
-                All Users <span className="text-red-500">(Admin)</span>
-              </Link>
-            </li>
-
             <hr />
           </>
         )}

@@ -58,21 +58,8 @@ const Header = () => {
               </Link>
             ) : (
               <Link href="/me">
-                <div className="flex items-center mb-4 space-x-3 mt-4 cursor-pointer">
-                  <img
-                    className="w-10 h-10 rounded-full"
-                    src={
-                      user?.avatar ? user?.avatar?.url : "/images/default.png"
-                    }
-                  />
-                  <div className="space-y-1 font-medium">
-                    <p>
-                      {user?.name}
-                      <time className="block text-sm text-gray-500 dark:text-gray-400">
-                        {user?.email}
-                      </time>
-                    </p>
-                  </div>
+                <div className="cursor-pointer space-x-3 w-10 h-10 bg-black text-white rounded-full overflow-hidden flex justify-center items-center">
+                  <p>{user?.name.charAt(0)}</p>
                 </div>
               </Link>
             )}

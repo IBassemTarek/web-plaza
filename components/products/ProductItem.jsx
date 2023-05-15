@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import Link from "next/link";
-import StarRatings from "react-star-ratings";
 import Image from "next/image";
 import CartContext from "@/context/CartContext";
 
@@ -17,69 +16,48 @@ const ProductItem = ({ product }) => {
       seller: product.seller,
     });
   };
-  console.log(product?.images[0].url);
   return (
-    <article className="border border-gray-200 overflow-hidden bg-white shadow-sm rounded mb-5">
-      <div className="flex flex-col md:flex-row">
-        <div className="md:w-1/4 flex p-3">
-          <Image
-            src={
-              product?.images[0]
-                ? product?.images[0].url
-                : "/images/default_product.png"
-            }
-            alt={product.name}
-            className="object-cover object-center rounded w-full h-full"
-            width={200}
-            height={200}
-          />
-        </div>
-        <div className="md:w-2/4">
-          <div className="p-4">
-            <Link
-              href={`/product/${product._id}`}
-              className="hover:text-blue-600"
-            >
-              {product.name}
-            </Link>
-            <div className="flex flex-wrap items-center space-x-2 mb-2">
-              <div className="ratings">
-                <div className="my-1">
-                  <StarRatings
-                    rating={product?.ratings}
-                    starRatedColor="#ffb829"
-                    numberOfStars={5}
-                    starDimension="18px"
-                    starSpacing="1px"
-                    name="rating"
-                  />
-                </div>
-              </div>
-              <b className="text-gray-300">•</b>
-              <span className="ml-1 text-yellow-500">{product?.ratings}</span>
+    <article className="overflow-hidden bg-white shadow-lg rounded-md mb-5 group hover:scale-105 transition duration-500 ease-in-out">
+      <div className="flex flex-col">
+        <Link href={`/product/${product._id}`}>
+          <div className="flex flex-col">
+            <div className="flex">
+              <Image
+                src={
+                  product?.images[0]
+                    ? product?.images[0].url
+                    : "/images/default_product.png"
+                }
+                alt={product.name}
+                className="object-cover object-center rounded w-full h-full"
+                width={200}
+                height={200}
+              />
             </div>
-            <p className="text-gray-500 mb-2">
-              {product?.description.substring(0, 150)}...
-            </p>
+            <div className="px-4 pt-4">
+              {product.name}
+
+              <p className="text-gray-500 pt-2">
+                {product?.description.substring(0, 150)}...
+              </p>
+            </div>
           </div>
-        </div>
-        <div className="md:w-1/4 border-t md:border-t-0 md:border-l border-gray-200">
-          <div className="p-5">
+        </Link>
+        <div className="flex justify-between relative pt-2">
+          <div className="pl-5 pb-5">
             <span className="text-xl font-semibold text-black">
               ${product?.price}
             </span>
 
             <p className="text-green-500">Free Shipping</p>
-            <div className="my-3">
-              <a
-                className="px-4 py-2 inline-block text-white bg-black border border-transparent rounded-md  cursor-pointer"
-                onClick={addToCartHandler}
-              >
-                {" "}
-                Add to Cart{" "}
-              </a>
-            </div>
           </div>
+          <a
+            className="absolute bottom-0 right-0 px-4 py-2 inline-block text-white bg-black border-transparent rounded-br-md rounded-tl-md  cursor-pointer z-50 hover:bg-gray-800"
+            onClick={addToCartHandler}
+          >
+            {" "}
+            Add to Cart{" "}
+          </a>
         </div>
       </div>
     </article>

@@ -54,12 +54,7 @@ export const AuthProvider = ({ children }) => {
 
       const { data } = await axios.put(
         `${process.env.API_URL}/api/auth/me/update`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
+        formData
       );
 
       if (data?.user) {
@@ -86,7 +81,6 @@ export const AuthProvider = ({ children }) => {
         router.replace("/me");
       }
     } catch (error) {
-      console.log(error.response);
       setError(error?.response?.data?.message);
     }
   };

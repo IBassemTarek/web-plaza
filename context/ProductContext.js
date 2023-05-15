@@ -13,24 +13,17 @@ export const ProductProvider = ({ children }) => {
 
   const router = useRouter();
 
-  const newProduct = async (product, token) => {
-    console.log(token);
+  const newProduct = async (product) => {
     try {
       const { data } = await axios.post(
         `${process.env.API_URL}/api/admin/products`,
-        product,
-        {
-          headers: {
-            Cookie: `next-auth.session-token=${token}`,
-          },
-        }
+        product
       );
 
       if (data) {
         router.replace("/admin/products");
       }
     } catch (error) {
-      console.log(error);
       setError(error?.response?.data?.message);
     }
   };

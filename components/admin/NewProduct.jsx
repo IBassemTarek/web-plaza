@@ -3,7 +3,7 @@
 import ProductContext from "@/context/ProductContext";
 import React, { useContext, useState } from "react";
 
-const NewProduct = ({ token }) => {
+const NewProduct = () => {
   const { newProduct } = useContext(ProductContext);
   const [product, setProduct] = useState({
     name: "",
@@ -32,7 +32,7 @@ const NewProduct = ({ token }) => {
   const submitHandler = (e) => {
     e.preventDefault();
 
-    newProduct(product, token);
+    newProduct(product);
   };
 
   return (

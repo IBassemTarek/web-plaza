@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useRef, useContext } from "react";
-import StarRatings from "react-star-ratings";
 import BreadCrumbs from "../layouts/BreadCrumbs";
 import CartContext from "@/context/CartContext";
 
@@ -30,7 +29,7 @@ const ProductDetails = ({ product }) => {
     { name: "Home", url: "/" },
     {
       name: `${product?.name?.substring(0, 100)} ...`,
-      url: `/products/${product?._id}`,
+      url: `/product/${product?._id}`,
     },
   ];
   return (
@@ -74,31 +73,6 @@ const ProductDetails = ({ product }) => {
             <main>
               <h2 className="font-semibold text-2xl mb-4">{product?.name}</h2>
 
-              <div className="flex flex-wrap items-center space-x-2 mb-2">
-                <div className="ratings">
-                  <StarRatings
-                    rating={product?.ratings}
-                    starRatedColor="#ffb829"
-                    numberOfStars={5}
-                    starDimension="20px"
-                    starSpacing="2px"
-                    name="rating"
-                  />
-                </div>
-                <span className="text-yellow-500">{product?.ratings}</span>
-
-                <svg
-                  width="6px"
-                  height="6px"
-                  viewBox="0 0 6 6"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <circle cx="3" cy="3" r="3" fill="#DBDBDB" />
-                </svg>
-
-                <span className="text-green-500">Verified</span>
-              </div>
-
               <p className="mb-4 font-semibold text-xl">${product?.price}</p>
 
               <p className="mb-4 text-gray-500">{product?.description}</p>
@@ -138,16 +112,6 @@ const ProductDetails = ({ product }) => {
                 </li>
               </ul>
             </main>
-          </div>
-
-          {/* <NewReview /> */}
-          <hr />
-
-          <div className="font-semibold">
-            <h1 className="text-gray-500 review-title mb-6 mt-10 text-2xl">
-              Other Customers Reviews
-            </h1>
-            {/* <Reviews /> */}
           </div>
         </div>
       </section>

@@ -22,6 +22,7 @@ const Login = () => {
       email,
       password,
       callbackUrl: callBackUrl ? parseCallbackUrl(callBackUrl) : "/",
+      redirect: false,
     });
 
     if (data?.error) {

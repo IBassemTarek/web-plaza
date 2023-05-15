@@ -64,9 +64,9 @@ const Cart = () => {
                 <article className="border border-gray-200 bg-white shadow-sm rounded mb-5 p-3 lg:p-5">
                   {cart?.cartItems?.map((cartItem) => (
                     <div>
-                      <div className="flex flex-wrap lg:flex-row gap-5  mb-4">
+                      <div className="flex flex-wrap lg:flex-row gap-5 mb-4">
                         <div className="w-full lg:w-2/5 xl:w-2/4">
-                          <figure className="flex leading-5">
+                          <div className="flex leading-5">
                             <div>
                               <div className="block w-16 h-16 rounded border border-gray-200 overflow-hidden">
                                 <img
@@ -75,22 +75,19 @@ const Cart = () => {
                                       ? cartItem.image
                                       : "/images/default_product.png"
                                   }
+                                  className="object-cover w-full h-full"
                                   alt={cartItem.name}
                                 />
                               </div>
                             </div>
                             <figcaption className="ml-3">
-                              <p>
-                                <a href="#" className="hover:text-blue-600">
-                                  {cartItem.name}
-                                </a>
-                              </p>
+                              <p>{cartItem.name}</p>
                               <p className="mt-1 text-gray-400">
                                 {" "}
                                 Seller: {cartItem.seller}
                               </p>
                             </figcaption>
-                          </figure>
+                          </div>
                         </div>
                         <div className="w-24">
                           <div className="flex flex-row h-10 w-full rounded-lg relative bg-transparent mt-1">
@@ -103,13 +100,16 @@ const Cart = () => {
                                 −
                               </span>
                             </button>
-                            <input
+                            {/* <input
                               type="number"
-                              className="outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-gray-900 custom-input-number"
+                              className="outline-none text-center w-full font-semibold text-md md:text-basecursor-default flex items-center text-gray-900 custom-input-number"
                               name="custom-input-number"
                               value={cartItem.quantity}
                               readOnly
-                            ></input>
+                            ></input> */}
+                            <div className=" bg-gray-300 w-full font-semibold text-md flex items-center justify-center text-gray-900 custom-input-number">
+                              {cartItem.quantity}
+                            </div>
                             <button
                               data-action="increment"
                               className="bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-r cursor-pointer"
@@ -179,7 +179,7 @@ const Cart = () => {
                   </ul>
 
                   <a
-                    className="px-4 py-3 mb-2 inline-block text-lg w-full text-center font-medium text-white bg-green-600 border border-transparent rounded-md hover:bg-green-700 cursor-pointer"
+                    className="px-4 py-3 mb-2 inline-block text-lg w-full text-center font-medium text-white bg-black border border-transparent rounded-md cursor-pointer"
                     onClick={checkoutHandler}
                   >
                     Continue
@@ -187,7 +187,7 @@ const Cart = () => {
 
                   <Link
                     href="/"
-                    className="px-4 py-3 inline-block text-lg w-full text-center font-medium text-green-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100"
+                    className="px-4 py-3 inline-block text-lg w-full text-center font-medium text-black bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100"
                   >
                     Back to shop
                   </Link>

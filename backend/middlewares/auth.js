@@ -1,8 +1,12 @@
 import { getSession } from "next-auth/react";
 import ErrorHandler from "../utils/errorHandler";
+import { getToken } from "next-auth/jwt";
 
 const isAuthenticatedUser = async (req, res, next) => {
-  const session = await getSession({ req });
+  const session = await getToken({
+    req,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
 
   if (!session) {
     return next(new ErrorHandler("Login first to access this route", 401));
