@@ -10,17 +10,16 @@ import BreadCrumbs from "../layouts/BreadCrumbs";
 const Shipping = ({ addresses }) => {
   const { cart } = useContext(CartContext);
 
-  const [shippingInfo, setShippinInfo] = useState("");
+  const [shippingInfo, setShippingInfo] = useState("");
 
   const setShippingAddress = (address) => {
-    setShippinInfo(address._id);
+    setShippingInfo(address._id);
   };
 
   const checkoutHandler = async () => {
     if (!shippingInfo) {
       return toast.error("Please select your shipping address");
     }
-    // move to stripe checkoutpage
     try {
       const { data } = await axios.post(
         `${process.env.API_URL}/api/orders/checkout_session`,
@@ -29,7 +28,6 @@ const Shipping = ({ addresses }) => {
           shippingInfo,
         }
       );
-
       window.location.href = data.url;
     } catch (error) {
       console.log(error.response);
@@ -39,13 +37,13 @@ const Shipping = ({ addresses }) => {
   const breadCrumbs = [
     { name: "Home", url: "/" },
     { name: "Cart", url: "/cart" },
-    { name: "Order", url: "" },
+    { name: "Order", url: "shipping" },
   ];
 
   return (
     <div>
       <BreadCrumbs breadCrumbs={breadCrumbs} />
-      <section className="py-10 bg-gray-50">
+      <section className="py-10">
         <div className="container max-w-screen-xl mx-auto px-4">
           <div className="flex flex-col md:flex-row gap-4 lg:gap-8">
             <main className="md:w-2/3">
@@ -55,13 +53,14 @@ const Shipping = ({ addresses }) => {
                 <div class="grid sm:grid-cols-2 gap-4 mb-6">
                   {addresses?.map((address) => (
                     <label
-                      class="flex p-3 border border-gray-200 rounded-md bg-gray-50 hover:border-blue-400 cursor-pointer"
+                      class="flex p-3 border border-gray-200 rounded-md bg-gray-50 hover:border-black cursor-pointer"
                       onClick={() => setShippingAddress(address)}
                     >
                       <span>
                         <input
                           name="shipping"
                           type="radio"
+                          color="black"
                           class="h-4 w-4 mt-1"
                         />
                       </span>
@@ -81,7 +80,7 @@ const Shipping = ({ addresses }) => {
 
                 <Link
                   href="/address/new"
-                  className="px-4 py-2 inline-block text-blue-600 border border-gray-300 rounded-md hover:bg-gray-100"
+                  className="px-4 py-2 inline-block text-white bg-black border border-transparent rounded-md"
                 >
                   <i className="mr-1 fa fa-plus"></i> Add new address
                 </Link>
@@ -89,12 +88,12 @@ const Shipping = ({ addresses }) => {
                 <div className="flex justify-end space-x-2 mt-10">
                   <Link
                     href="/cart"
-                    className="px-5 py-2 inline-block text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:text-blue-600"
+                    className="px-5 py-2 inline-block text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:text-gray-600"
                   >
                     Back
                   </Link>
                   <a
-                    className="px-5 py-2 inline-block text-white bg-green-600 border border-transparent rounded-md hover:bg-green-700 cursor-pointer"
+                    className="px-5 py-2 inline-block text-white bg-black border border-transparent rounded-md hover:bg-gray-900 cursor-pointer"
                     onClick={checkoutHandler}
                   >
                     Checkout
@@ -135,6 +134,7 @@ const Shipping = ({ addresses }) => {
                           height="50"
                           src={item.image}
                           alt="Title"
+                          className="object-cover w-full h-full rounded"
                         />
                         <span class="absolute -top-2 -right-2 w-6 h-6 text-sm text-center flex items-center justify-center text-white bg-gray-400 rounded-full">
                           {item.quantity}

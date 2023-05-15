@@ -36,24 +36,6 @@ const orderSchema = mongoose.Schema({
       },
     },
   ],
-  paymentInfo: {
-    id: {
-      type: String,
-      required: true,
-    },
-    status: {
-      type: String,
-      required: true,
-    },
-    taxPaid: {
-      type: Number,
-      required: true,
-    },
-    amountPaid: {
-      type: Number,
-      required: true,
-    },
-  },
   orderStatus: {
     type: String,
     default: "Processing",

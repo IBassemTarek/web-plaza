@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 
 const OrderItem = ({ order }) => {
+  console.log(order);
   return (
     <article className="p-3 lg:p-5 mb-5 bg-white border border-blue-600 rounded-md">
       <header className="lg:flex justify-between mb-4">
@@ -41,16 +42,6 @@ const OrderItem = ({ order }) => {
             <li>{order?.shippingInfo?.country}</li>
           </ul>
         </div>
-        <div>
-          <p className="text-gray-400 mb-1">Payment</p>
-          <ul className="text-gray-600">
-            <li className="text-green-400">
-              {order?.paymentInfo?.status?.toUpperCase()}
-            </li>
-            <li>Tax paid: ${order?.paymentInfo?.taxPaid}</li>
-            <li>Total paid: ${order?.paymentInfo?.amountPaid}</li>
-          </ul>
-        </div>
       </div>
 
       <hr className="my-4" />
@@ -59,12 +50,13 @@ const OrderItem = ({ order }) => {
         {order?.orderItems?.map((item) => (
           <figure className="flex flex-row mb-4">
             <div>
-              <div className="block w-20 h-20 rounded border border-gray-200 overflow-hidden p-3">
+              <div className="block w-20 h-20 rounded border border-gray-200 overflow-hidden p-1">
                 <Image
                   src={item?.image}
                   height="60"
                   width="60"
                   alt={item.name}
+                  className="object-cover object-center h-full w-full rounded"
                 />
               </div>
             </div>
