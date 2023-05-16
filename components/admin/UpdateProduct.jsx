@@ -1,17 +1,19 @@
 "use client";
 
 import ProductContext from "@/context/ProductContext";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
-const NewProduct = () => {
-  const { newProduct, loading } = useContext(ProductContext);
+const UpdateProduct = ({ id, productData }) => {
+  const { updateProduct, error, updated, setUpdated, clearErrors, loading } =
+    useContext(ProductContext);
   const [product, setProduct] = useState({
-    name: "",
-    description: "",
-    seller: "",
-    price: "",
-    stock: "",
-    category: "",
+    name: productData.name,
+    description: productData.description,
+    seller: productData.seller,
+    price: productData.price,
+    stock: productData.stock,
+    category: productData.category,
   });
 
   const { name, description, seller, price, stock, category } = product;
@@ -22,16 +24,27 @@ const NewProduct = () => {
 
   const categories = ["Electronics", "Gaming", "Fashion", "Grocery"];
 
+  useEffect(() => {
+    if (updated) {
+      toast.success("product Updated");
+      setUpdated(false);
+    }
+
+    if (error) {
+      toast.error(error);
+      clearErrors();
+    }
+  }, [error, updated]);
+
   const submitHandler = (e) => {
     e.preventDefault();
-
-    newProduct(product);
+    updateProduct(id, product);
   };
 
   return (
     <section className="container max-w-3xl p-6 mx-auto">
       <h1 className="text-xl md:text-3xl font-semibold text-black mb-8">
-        Create New Product
+        Update Product
       </h1>
 
       <form onSubmit={submitHandler}>
@@ -147,7 +160,7 @@ const NewProduct = () => {
           {loading ? (
             <i className="fas fa-circle-notch fa-spin"></i>
           ) : (
-            "Create Product"
+            "Update Product"
           )}
         </button>
       </form>
@@ -155,4 +168,4 @@ const NewProduct = () => {
   );
 };
 
-export default NewProduct;
+export default UpdateProduct;

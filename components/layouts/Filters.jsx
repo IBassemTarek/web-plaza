@@ -75,7 +75,7 @@ const Filters = () => {
         } md:block px-6 py-4 border border-gray-200 bg-white rounded shadow-sm transition-all`}
       >
         <h3 className="font-semibold mb-2">Price ($)</h3>
-        <div className="grid md:grid-cols-3 gap-x-2">
+        <div className="grid md:grid-cols-2 gap-x-2">
           <div className="mb-4">
             <input
               name="min"
@@ -97,15 +97,14 @@ const Filters = () => {
               onChange={(e) => setMax(e.target.value)}
             />
           </div>
-
-          <div className="mb-4">
-            <button
-              className="px-1 py-2 text-center w-full inline-block text-white bg-black border border-transparent rounded-md"
-              onClick={handleButtonClick}
-            >
-              Go
-            </button>
-          </div>
+        </div>
+        <div className="mb-4 w-full">
+          <button
+            className="px-1 py-2 text-center w-full inline-block text-white bg-black border border-transparent rounded-md"
+            onClick={handleButtonClick}
+          >
+            Go
+          </button>
         </div>
       </div>
 
@@ -135,12 +134,12 @@ const Filters = () => {
               <input
                 name="category"
                 type="checkbox"
-                value="Laptops"
+                value="Gaming"
                 className="h-4 w-4"
-                defaultChecked={checkHandler("category", "Laptops")}
+                defaultChecked={checkHandler("category", "Gaming")}
                 onClick={(e) => handleClick(e.target)}
               />
-              <span className="ml-2 text-gray-500"> Laptops </span>
+              <span className="ml-2 text-gray-500"> Gaming </span>
             </label>
           </li>
           <li>
@@ -148,12 +147,12 @@ const Filters = () => {
               <input
                 name="category"
                 type="checkbox"
-                value="Toys"
+                value="Fashion"
                 className="h-4 w-4"
-                defaultChecked={checkHandler("category", "Toys")}
+                defaultChecked={checkHandler("category", "Fashion")}
                 onClick={(e) => handleClick(e.target)}
               />
-              <span className="ml-2 text-gray-500"> Toys </span>
+              <span className="ml-2 text-gray-500"> Fashion </span>
             </label>
           </li>
           <li>
@@ -161,25 +160,12 @@ const Filters = () => {
               <input
                 name="category"
                 type="checkbox"
-                value="Office"
+                value="Grocery"
                 className="h-4 w-4"
-                defaultChecked={checkHandler("category", "Office")}
+                defaultChecked={checkHandler("category", "Grocery")}
                 onClick={(e) => handleClick(e.target)}
               />
-              <span className="ml-2 text-gray-500"> Office </span>
-            </label>
-          </li>
-          <li>
-            <label className="flex items-center">
-              <input
-                name="category"
-                type="checkbox"
-                value="Beauty"
-                className="h-4 w-4"
-                defaultChecked={checkHandler("category", "Beauty")}
-                onClick={(e) => handleClick(e.target)}
-              />
-              <span className="ml-2 text-gray-500"> Beauty </span>
+              <span className="ml-2 text-gray-500"> Grocery </span>
             </label>
           </li>
         </ul>

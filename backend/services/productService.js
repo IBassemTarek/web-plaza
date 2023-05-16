@@ -10,8 +10,34 @@ export const newProduct = async (req, res, next) => {
   });
 };
 
+export const updateProduct = async (req, res, next) => {
+  let product = await Product.findById(req.query.id);
+
+  if (!product) {
+    return next(new ErrorHandler("product not found", 404));
+  }
+  product = await Product.findByIdAndUpdate(req.query.id, req.body);
+  res.status(200).json({
+    product,
+  });
+};
+
+export const deleteProduct = async (req, res) => {
+  let product = await Product.findById(req.query.id);
+
+  if (!product) {
+    return next(new ErrorHandler("product not found", 404));
+  }
+
+  await product.remove();
+
+  res.status(200).json({
+    success: true,
+  });
+};
+
 export const getProducts = async (req, res, next) => {
-  const resPerPage = 2;
+  const resPerPage = 6;
   const productsCount = await Product.countDocuments();
 
   const apiFilters = new APIFilters(Product.find(), req.query)

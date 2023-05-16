@@ -70,7 +70,11 @@ const UpdateProfile = () => {
             className="my-2 px-4 py-2 text-center w-full inline-block text-white bg-black border border-transparent rounded-md"
             disabled={loading ? true : false}
           >
-            {loading ? "Updating..." : "Update"}
+            {loading ? (
+              <i className="fas fa-circle-notch fa-spin"></i>
+            ) : (
+              "Update"
+            )}
           </button>
         </form>
       </div>
