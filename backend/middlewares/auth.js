@@ -17,6 +17,15 @@ const isAuthenticatedUser = async (req, res, next) => {
   next();
 };
 
+const corsMW = async (req, res, next) => {
+  await NextCors(req, res, {
+    methods: ["POST"],
+    origin: "*",
+    optionsSuccessStatus: 201,
+  });
+  next();
+};
+
 const authorizeRoles = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
@@ -31,4 +40,4 @@ const authorizeRoles = (...roles) => {
   };
 };
 
-export { isAuthenticatedUser, authorizeRoles };
+export { isAuthenticatedUser, authorizeRoles, corsMW };
