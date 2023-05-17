@@ -23,18 +23,7 @@ const Login = () => {
       email,
       password,
       callbackUrl: callBackUrl ? parseCallbackUrl(callBackUrl) : "/",
-      redirect: async ({ url, baseUrl }) => {
-        return Promise.resolve(
-          process.env.ALLOWED_NEXT_AUTH_URLS.some((regex) => {
-            const re = new RegExp(regex);
-            if (re.test(url)) {
-            }
-            return re.test(url);
-          })
-            ? url
-            : "Login"
-        );
-      },
+      redirect: false,
     });
 
     setLoading(false);
