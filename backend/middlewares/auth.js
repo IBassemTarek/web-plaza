@@ -30,4 +30,4 @@ const authorizeRoles = (...roles) => {
   };
 };
 
-export { isAuthenticatedUser, authorizeRoles, corsMW };
+export { isAuthenticatedUser, authorizeRoles };
