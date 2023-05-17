@@ -1,20 +1,27 @@
+import axios from "axios";
 import React from "react";
 
 import { cookies } from "next/headers";
 import Shipping from "@/components/cart/Shipping";
 
-const getCookie = async () => {
+const getAddresses = async () => {
   const nextCookies = cookies();
 
   const nextAuthSessionToken = nextCookies.get("next-auth.session-token");
 
-  return `next-auth.session-token=${nextAuthSessionToken?.value}`;
+  const { data } = await axios.get(`${process.env.API_URL}/api/address`, {
+    headers: {
+      Cookie: `next-auth.session-token=${nextAuthSessionToken?.value}`,
+    },
+  });
+
+  return data?.addresses;
 };
 
 const ShippingPage = async () => {
-  const Cookie = await getCookie();
+  const addresses = await getAddresses();
 
-  return <Shipping cookie={Cookie} />;
+  return <Shipping addresses={addresses} />;
 };
 
 export default ShippingPage;

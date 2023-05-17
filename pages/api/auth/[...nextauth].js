@@ -60,6 +60,7 @@ export default async function auth(req, res) {
     },
     pages: {
       signIn: "/login",
+      error: "/auth/error",
     },
     secret: process.env.NEXTAUTH_SECRET,
   });

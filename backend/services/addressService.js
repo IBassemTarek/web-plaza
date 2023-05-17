@@ -1,4 +1,3 @@
-import next from "next";
 import Address from "../models/address";
 import ErrorHandler from "../utils/errorHandler";
 
@@ -20,7 +19,7 @@ export const getAddresses = async (req, res) => {
   });
 };
 
-export const getAddress = async (req, res) => {
+export const getAddress = async (req, res, next) => {
   const address = await Address.findById(req.query.id);
 
   if (!address) {
@@ -32,7 +31,7 @@ export const getAddress = async (req, res) => {
   });
 };
 
-export const updateAddress = async (req, res) => {
+export const updateAddress = async (req, res, next) => {
   let address = await Address.findById(req.query.id);
 
   if (!address) {
@@ -46,7 +45,7 @@ export const updateAddress = async (req, res) => {
   });
 };
 
-export const deleteAddress = async (req, res) => {
+export const deleteAddress = async (req, res, next) => {
   let address = await Address.findById(req.query.id);
 
   if (!address) {
