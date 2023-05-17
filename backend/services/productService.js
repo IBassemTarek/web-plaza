@@ -60,6 +60,9 @@ export const getProducts = async (req, res, next) => {
 };
 
 export const getProduct = async (req, res, next) => {
+  if (!req?.query?.id) {
+    return next(new ErrorHandler("Please enter product id", 400));
+  }
   const product = await Product.findById(req.query.id);
 
   if (!product) {

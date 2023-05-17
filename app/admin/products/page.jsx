@@ -6,7 +6,7 @@ import Products from "@/components/admin/Products";
 
 const getProducts = async (searchParams) => {
   const urlParams = {
-    page: searchParams.page,
+    page: searchParams?.page,
   };
 
   const searchQuery = queryString.stringify(urlParams);

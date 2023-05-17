@@ -6,11 +6,11 @@ import queryString from "query-string";
 
 const getProducts = async (searchParams) => {
   const urlParams = {
-    keyword: searchParams.keyword,
-    page: searchParams.page,
-    category: searchParams.category,
-    "price[gte]": searchParams.min,
-    "price[lte]": searchParams.max,
+    keyword: searchParams?.keyword,
+    page: searchParams?.page,
+    category: searchParams?.category,
+    "price[gte]": searchParams?.min,
+    "price[lte]": searchParams?.max,
   };
 
   const searchQuery = queryString.stringify(urlParams);
