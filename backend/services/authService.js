@@ -1,19 +1,10 @@
 import User from "../models/user";
 import bcrypt from "bcryptjs";
 import ErrorHandler from "../utils/errorHandler";
-import { initMiddleware } from "@/backend/utils/init-middleware";
-import Cors from "cors";
-
-const cors = initMiddleware(
-  Cors({
-    methods: ["POST"],
-  })
-);
 
 export const registerUser = async (req, res) => {
   const { name, email, password } = req.body;
 
-  await cors(req, res);
   const user = await User.create({
     name,
     email,

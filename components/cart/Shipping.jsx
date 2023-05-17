@@ -3,14 +3,26 @@
 import CartContext from "@/context/CartContext";
 import axios from "axios";
 import Link from "next/link";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import BreadCrumbs from "../layouts/BreadCrumbs";
 
-const Shipping = ({ addresses }) => {
+const getAddress = async (cookie) => {
+  return await axios.get(`${process.env.API_URL}/api/address`, {
+    headers: {
+      cookie,
+    },
+  });
+};
+const Shipping = ({ cookie }) => {
   const { cart } = useContext(CartContext);
+  useEffect(() => {
+    const { data } = getAddress(cookie);
+    setAddresses(data.addresses);
+  }, []);
 
   const [shippingInfo, setShippingInfo] = useState("");
+  const [addresses, setAddresses] = useState(null);
 
   const setShippingAddress = (address) => {
     setShippingInfo(address._id);
