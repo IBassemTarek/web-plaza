@@ -1,4 +1,3 @@
-import { getSession } from "next-auth/react";
 import ErrorHandler from "../utils/errorHandler";
 import { getToken } from "next-auth/jwt";
 
@@ -14,15 +13,6 @@ const isAuthenticatedUser = async (req, res, next) => {
 
   req.user = session.user;
 
-  next();
-};
-
-const corsMW = async (req, res, next) => {
-  await NextCors(req, res, {
-    methods: ["POST"],
-    origin: "*",
-    optionsSuccessStatus: 201,
-  });
   next();
 };
 

@@ -5,6 +5,11 @@ import NextCors from "nextjs-cors";
 
 export const registerUser = async (req, res) => {
   const { name, email, password } = req.body;
+  await NextCors(req, res, {
+    methods: ["POST"],
+    origin: "*",
+    optionsSuccessStatus: 201,
+  });
   const user = await User.create({
     name,
     email,
