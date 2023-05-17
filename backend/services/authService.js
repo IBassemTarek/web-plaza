@@ -1,7 +1,7 @@
 import User from "../models/user";
 import bcrypt from "bcryptjs";
 import ErrorHandler from "../utils/errorHandler";
-import initMiddleware from "@/backend/utils/init-middleware";
+import { initMiddleware } from "@/backend/utils/init-middleware";
 import Cors from "cors";
 
 const cors = initMiddleware(

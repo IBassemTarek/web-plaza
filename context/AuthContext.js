@@ -33,9 +33,9 @@ export const AuthProvider = ({ children }) => {
         },
         {
           headers: {
-            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Origin": "https://webplaza.vercel.app",
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-            "Access-Control-Allow-Headers": "*",
+            "Access-Control-Allow-Headers": "https://webplaza.vercel.app",
             "Access-Control-Allow-Credentials": true,
           },
         }
