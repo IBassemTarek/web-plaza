@@ -7,7 +7,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head />
-      <body>
+      <body suppressHydrationWarning={true}>
         <GlobalProvider>
           <Header />
           {children}

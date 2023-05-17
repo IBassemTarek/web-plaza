@@ -1,23 +1,14 @@
 "use client";
 
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import Link from "next/link";
 import Search from "./Search";
 import Image from "next/image";
 import CartContext from "@/context/CartContext";
-import { useSession } from "next-auth/react";
 import AuthContext from "@/context/AuthContext";
 
 const Header = () => {
-  const { user, setUser } = useContext(AuthContext);
-
-  const { data } = useSession();
-
-  useEffect(() => {
-    if (data) {
-      setUser(data?.user);
-    }
-  }, [data]);
+  const { user } = useContext(AuthContext);
 
   const { cart } = useContext(CartContext);
   const cartItems = cart?.cartItems;

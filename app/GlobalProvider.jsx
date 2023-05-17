@@ -12,13 +12,13 @@ export function GlobalProvider({ children }) {
   return (
     <>
       <ToastContainer position="bottom-right" />
-      <AuthProvider>
-        <CartProvider>
-          <ProductProvider>
-            <SessionProvider>{children}</SessionProvider>
-          </ProductProvider>
-        </CartProvider>
-      </AuthProvider>
+      <SessionProvider>
+        <AuthProvider>
+          <CartProvider>
+            <ProductProvider>{children}</ProductProvider>
+          </CartProvider>
+        </AuthProvider>
+      </SessionProvider>
     </>
   );
 }

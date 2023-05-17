@@ -10,6 +10,7 @@ import { parseCallbackUrl } from "@/helpers/helpers";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
   const params = useSearchParams();
@@ -17,7 +18,7 @@ const Login = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     const data = await signIn("credentials", {
       email,
       password,
@@ -25,6 +26,7 @@ const Login = () => {
       redirect: false,
     });
 
+    setLoading(false);
     if (data?.error) {
       toast.error(data?.error);
     }
@@ -71,7 +73,7 @@ const Login = () => {
           type="submit"
           className="my-2 px-4 py-2 text-center w-full inline-block text-white bg-black border border-transparent rounded-md"
         >
-          Login
+          {loading ? <i className="fas fa-circle-notch fa-spin"></i> : "Login"}
         </button>
 
         <hr className="mt-4" />

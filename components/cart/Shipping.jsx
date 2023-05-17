@@ -48,12 +48,15 @@ const Shipping = ({ addresses }) => {
           <div className="flex flex-col md:flex-row gap-4 lg:gap-8">
             <main className="md:w-2/3">
               <article className="border border-gray-200 bg-white shadow-sm rounded p-4 lg:p-6 mb-5">
-                <h2 class="text-xl font-semibold mb-5">Shipping information</h2>
+                <h2 className="text-xl font-semibold mb-5">
+                  Shipping information
+                </h2>
 
-                <div class="grid sm:grid-cols-2 gap-4 mb-6">
-                  {addresses?.map((address) => (
+                <div className="grid sm:grid-cols-2 gap-4 mb-6">
+                  {addresses?.map((address, i) => (
                     <label
-                      class="flex p-3 border border-gray-200 rounded-md bg-gray-50 hover:border-black cursor-pointer"
+                      key={i}
+                      className="flex p-3 border border-gray-200 rounded-md bg-gray-50 hover:border-black cursor-pointer"
                       onClick={() => setShippingAddress(address)}
                     >
                       <span>
@@ -61,12 +64,12 @@ const Shipping = ({ addresses }) => {
                           name="shipping"
                           type="radio"
                           color="black"
-                          class="h-4 w-4 mt-1"
+                          className="h-4 w-4 mt-1"
                         />
                       </span>
-                      <p class="ml-2">
+                      <p className="ml-2">
                         <span>{address.street}</span>
-                        <small class="block text-sm text-gray-400">
+                        <small className="block text-sm text-gray-400">
                           {address.city}, {address.state}, {address.zipCode}
                           <br />
                           {address.country}
@@ -123,12 +126,12 @@ const Shipping = ({ addresses }) => {
 
                 <hr className="my-4" />
 
-                <h2 class="text-lg font-semibold mb-3">Items in cart</h2>
+                <h2 className="text-lg font-semibold mb-3">Items in cart</h2>
 
-                {cart?.cartItems?.map((item) => (
-                  <figure class="flex items-center mb-4 leading-5">
+                {cart?.cartItems?.map((item, i) => (
+                  <figure key={i} className="flex items-center mb-4 leading-5">
                     <div>
-                      <div class="block relative w-20 h-20 rounded p-1 border border-gray-200">
+                      <div className="block relative w-20 h-20 rounded p-1 border border-gray-200">
                         <img
                           width="50"
                           height="50"
@@ -136,14 +139,14 @@ const Shipping = ({ addresses }) => {
                           alt="Title"
                           className="object-cover w-full h-full rounded"
                         />
-                        <span class="absolute -top-2 -right-2 w-6 h-6 text-sm text-center flex items-center justify-center text-white bg-gray-400 rounded-full">
+                        <span className="absolute -top-2 -right-2 w-6 h-6 text-sm text-center flex items-center justify-center text-white bg-gray-400 rounded-full">
                           {item.quantity}
                         </span>
                       </div>
                     </div>
-                    <figcaption class="ml-3">
+                    <figcaption className="ml-3">
                       <p>{item.name.substring(0, 50)}</p>
-                      <p class="mt-1 text-gray-400">
+                      <p className="mt-1 text-gray-400">
                         Total: ${item.quantity * item.price}
                       </p>
                     </figcaption>

@@ -31,8 +31,8 @@ const Products = ({ data }) => {
           </tr>
         </thead>
         <tbody>
-          {data?.products?.map((product) => (
-            <tr className="bg-white">
+          {data?.products?.map((product, i) => (
+            <tr key={i} className="bg-white">
               <td className="px-6 py-2">
                 {product?.name.substring(0, 70) + "..."}
               </td>

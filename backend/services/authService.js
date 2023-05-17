@@ -1,10 +1,15 @@
 import User from "../models/user";
 import bcrypt from "bcryptjs";
 import ErrorHandler from "../utils/errorHandler";
+import NextCors from "nextjs-cors";
 
 export const registerUser = async (req, res) => {
   const { name, email, password } = req.body;
-
+  await NextCors(req, res, {
+    methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+    origin: "*",
+    optionsSuccessStatus: 200,
+  });
   const user = await User.create({
     name,
     email,

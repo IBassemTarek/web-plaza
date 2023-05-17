@@ -2,8 +2,9 @@
 
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 
+import { useSession } from "next-auth/react";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -12,6 +13,13 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(null);
   const [updated, setUpdated] = useState(false);
 
+  const { data } = useSession();
+
+  useEffect(() => {
+    if (data) {
+      setUser(data?.user);
+    }
+  }, [data]);
   const router = useRouter();
 
   const registerUser = async ({ name, email, password }) => {
@@ -22,6 +30,15 @@ export const AuthProvider = ({ children }) => {
           name,
           email,
           password,
+        },
+        {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+            "Access-Control-Allow-Headers":
+              "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+            "Access-Control-Allow-Credentials": true,
+          },
         }
       );
 

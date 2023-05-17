@@ -54,8 +54,9 @@ const ProductDetails = ({ product }) => {
                 />
               </div>
               <div className="space-x-2 overflow-auto text-center whitespace-nowrap">
-                {product?.images?.map((img) => (
+                {product?.images?.map((img, i) => (
                   <a
+                    key={i}
                     className="inline-block border border-gray-200 p-1 rounded-md hover:border-blue-500 cursor-pointer"
                     onClick={() => setImgPreview(img?.url)}
                   >

@@ -47,8 +47,8 @@ const OrderItem = ({ order }) => {
       <hr className="my-4" />
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-2">
-        {order?.orderItems?.map((item) => (
-          <figure className="flex flex-row mb-4">
+        {order?.orderItems?.map((item, i) => (
+          <figure key={i} className="flex flex-row mb-4">
             <div>
               <div className="block w-20 h-20 rounded border border-gray-200 overflow-hidden p-1">
                 <Image
