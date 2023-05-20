@@ -36,11 +36,11 @@ export const deleteProduct = async (req, res) => {
   });
 };
 
-export const getProducts = async (req, res, next) => {
+export const GetProducts = async (searchParams) => {
   const resPerPage = 6;
   const productsCount = await Product.countDocuments();
 
-  const apiFilters = new APIFilters(Product.find(), req.query)
+  const apiFilters = new APIFilters(Product.find(), searchParams)
     .search()
     .filter();
 
@@ -50,28 +50,44 @@ export const getProducts = async (req, res, next) => {
   apiFilters.pagination(resPerPage);
 
   products = await apiFilters.query.clone();
-
-  res.status(200).json({
-    productsCount,
-    resPerPage,
-    filteredProductsCount,
-    products,
-  });
+  return new Response(
+    JSON.stringify({
+      productsCount,
+      resPerPage,
+      filteredProductsCount,
+      products,
+    }),
+    {
+      status: 200,
+    }
+  );
 };
 
-export const getProduct = async (req, res, next) => {
-  if (!req?.query?.id) {
-    return next(new ErrorHandler("Please enter product id", 400));
+export const GetProduct = async (id) => {
+  if (!id) {
+    return new Response(
+      JSON.stringify({
+        error: "Please enter product id",
+      }),
+      {
+        status: 400,
+      }
+    );
   }
-  const product = await Product.findById(req.query.id);
+
+  const product = await Product.findById(id);
 
   if (!product) {
-    res.status(404).json({
-      error: "Product not found.",
-    });
+    return new Response(
+      JSON.stringify({
+        error: "Product not found.",
+      }),
+      {
+        status: 404,
+      }
+    );
   }
-
-  res.status(200).json({
-    product,
+  return new Response(JSON.stringify(product), {
+    status: 200,
   });
 };

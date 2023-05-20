@@ -5,31 +5,41 @@ class APIFilters {
   }
 
   search() {
-    const keyword = this.queryStr.keyword
+    const keyword = this.queryStr.get("keyword")
       ? {
           name: {
-            $regex: this.queryStr.keyword,
+            $regex: this.queryStr.get("keyword"),
             $options: "i",
           },
         }
       : {};
+
+    if (Object.keys(keyword).length === 0) {
+      // Return all products when no keyword is provided
+      return this;
+    }
 
     this.query = this.query.find({ ...keyword });
     return this;
   }
 
   filter() {
-    const queryCopy = { ...this.queryStr };
+    const queryCopy = new URLSearchParams(this.queryStr);
 
     const removeFields = ["keyword", "page"];
-    removeFields.forEach((el) => delete queryCopy[el]);
+    removeFields.forEach((el) => queryCopy.delete(el));
+
+    if (queryCopy.toString().length === 0) {
+      // Return all products when no filter parameters are present
+      return this;
+    }
 
     let output = {};
     let prop = "";
 
-    for (let key in queryCopy) {
+    for (let key of queryCopy.keys()) {
       if (!key.match(/\b(gt|gte|lt|lte)/)) {
-        output[key] = queryCopy[key];
+        output[key] = queryCopy.get(key);
       } else {
         prop = key.split("[")[0];
 
@@ -39,17 +49,16 @@ class APIFilters {
           output[prop] = {};
         }
 
-        output[prop][`$${operator}`] = queryCopy[key];
+        output[prop][`$${operator}`] = queryCopy.get(key);
       }
     }
-    // { price: { $gte: 100, $lte: 1000 } }
 
     this.query = this.query.find(output);
     return this;
   }
 
   pagination(resPerPage) {
-    const currentPage = Number(this.queryStr.page) || 1;
+    const currentPage = Number(this.queryStr.get("page")) || 1;
     const skip = resPerPage * (currentPage - 1);
 
     this.query = this.query.limit(resPerPage).skip(skip);

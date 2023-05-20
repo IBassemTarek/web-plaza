@@ -8,7 +8,7 @@ import {
 import {
   deleteProduct,
   updateProduct,
-} from "@/backend/services/productService";
+} from "@/backend/services/product_service";
 
 const handler = nc({ onError });
 

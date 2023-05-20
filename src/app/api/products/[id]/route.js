@@ -1,12 +1,8 @@
-import nc from "next-connect";
 import dbConnect from "@/backend/config/dbConnect";
-import { getProduct } from "@/backend/services/productService";
-import onError from "@/backend/middlewares/errors";
+import { GetProduct } from "@/backend/services/product_service";
 
-const handler = nc({ onError });
-
-dbConnect();
-
-handler.get(getProduct);
-
-export default handler;
+export async function GET(_, context) {
+  const { params } = context;
+  dbConnect();
+  return await GetProduct(params?.id);
+}

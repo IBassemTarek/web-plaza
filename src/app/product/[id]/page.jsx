@@ -16,7 +16,7 @@ const getProductDetails = async (id = null) => {
       },
     }
   );
-  return data?.product;
+  return data;
 };
 
 const ProductDetailsPage = async ({ params = null }) => {
