@@ -16,15 +16,15 @@ export const registerUser = async (req, res) => {
   });
 };
 
-export const updateProfile = async (req, res) => {
+export const UpdateProfile = async (req) => {
   const userData = await User.findById(req.user._id);
   const newUserData = {
     name: req.body?.name || userData.name,
     email: req.body?.email || userData.email,
   };
   const user = await User.findByIdAndUpdate(req.user._id, newUserData);
-  res.status(200).json({
-    user,
+  return new Response(JSON.stringify(user), {
+    status: 200,
   });
 };
 

@@ -9,6 +9,7 @@ import AuthContext from "@/context/AuthContext";
 
 const Header = () => {
   const { user } = useContext(AuthContext);
+  console.log(user);
 
   const { cart } = useContext(CartContext);
   const cartItems = cart?.cartItems;

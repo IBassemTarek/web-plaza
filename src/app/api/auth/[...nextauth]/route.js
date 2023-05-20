@@ -5,6 +5,7 @@ import User from "@/backend/models/user";
 import bcrypt from "bcryptjs";
 import dbConnect from "@/backend/config/dbConnect";
 import { signJwtAccessToken } from "@/lib/jwt";
+import UserAddresses from "@/components/user/UserAddresses";
 
 const handler = NextAuth({
   session: {
@@ -24,12 +25,13 @@ const handler = NextAuth({
         if (!isPasswordMatched) {
           throw new Error("Invalid Email or Password");
         }
-        delete user?.password;
+        // remove password from user object
+        const { password: pass, ...userWithoutPass } = user.toObject();
 
-        const accessToken = signJwtAccessToken(user);
-        if (user) {
+        const accessToken = signJwtAccessToken(JSON.stringify(userWithoutPass));
+        if (accessToken) {
           return {
-            ...user,
+            ...userWithoutPass,
             accessToken,
           };
         } else {
@@ -39,19 +41,28 @@ const handler = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
-      if (req.url === "/api/auth/session?update") {
-        // hit the db and eturn the updated user
-
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith("/api/auth/session?update")) {
         const updatedUser = await User.findById(token.user._id);
-        token.user = updatedUser;
+        const accessToken = signJwtAccessToken(JSON.stringify(updatedUser));
+        token.user = {
+          ...updatedUser,
+          accessToken,
+        };
       }
-      return { ...token, ...user };
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      else if (new URL(url).origin === baseUrl) return url;
+      return baseUrl;
+    },
+    async jwt({ token, user }) {
+      user && (token.user = user);
+      return token;
     },
 
     async session({ session, token }) {
-      session.user = token;
-      delete session?.user?.password;
+      session.user = token.user;
+      const { password, ...userWithoutPass } = session.user;
+      session.user = userWithoutPass;
       return session;
     },
   },
