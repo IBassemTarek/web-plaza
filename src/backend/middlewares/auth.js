@@ -1,8 +1,6 @@
 import { verifyJwt } from "@/lib/jwt";
 
-const isAuthenticatedUser = async (request) => {
-  const accessToken = request.headers.get("authorization");
-
+const isAuthenticatedUser = (accessToken) => {
   if (!accessToken || !verifyJwt(accessToken)) {
     return new Response(
       JSON.stringify({

@@ -1,15 +1,12 @@
-import nc from "next-connect";
 import dbConnect from "@/backend/config/dbConnect";
-import { getAddresses, newAddress } from "@/backend/services/addressService";
-import { isAuthenticatedUser } from "@/backend/middlewares/auth";
+import { GetAddresses, NewAddress } from "@/backend/services/address_service";
 
-import onError from "@/backend/middlewares/errors";
+export async function GET(request) {
+  dbConnect();
+  return await GetAddresses(request);
+}
 
-const handler = nc({ onError });
-
-dbConnect();
-
-handler.use(isAuthenticatedUser).get(getAddresses);
-handler.use(isAuthenticatedUser).post(newAddress);
-
-export default handler;
+export async function POST(request) {
+  dbConnect();
+  return await NewAddress(request);
+}

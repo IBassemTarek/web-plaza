@@ -1,7 +1,9 @@
+import { getToken } from "next-auth/jwt";
+import { isAuthenticatedUser } from "../middlewares/auth";
 import Address from "../models/address";
 import ErrorHandler from "../utils/errorHandler";
 
-export const newAddress = async (req, res) => {
+export const NewAddress = async (req, res) => {
   req.body.user = req.user._id;
 
   const address = await Address.create(req.body);
@@ -11,12 +13,19 @@ export const newAddress = async (req, res) => {
   });
 };
 
-export const getAddresses = async (req, res) => {
-  const addresses = await Address.find({ user: req.user._id });
-
-  res.status(200).json({
-    addresses,
+export const GetAddresses = async (req, res) => {
+  const session = await getToken({
+    req,
+    secret: process.env.NEXTAUTH_SECRET,
   });
+  const user = isAuthenticatedUser(session?.user?.accessToken);
+  if (user) {
+    const userId = JSON.parse(user.data);
+    const addresses = await Address.find({ user: userId._id });
+    return new Response(JSON.stringify(addresses), {
+      status: 200,
+    });
+  }
 };
 
 export const getAddress = async (req, res, next) => {

@@ -14,8 +14,7 @@ const getAddresses = async () => {
       Cookie: `next-auth.session-token=${nextAuthSessionToken?.value}`,
     },
   });
-
-  return data?.addresses;
+  return data;
 };
 
 const ProfilePage = async () => {

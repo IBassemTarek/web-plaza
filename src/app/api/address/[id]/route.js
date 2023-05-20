@@ -4,7 +4,7 @@ import {
   deleteAddress,
   getAddress,
   updateAddress,
-} from "@/backend/services/addressService";
+} from "@/backend/services/address_service";
 import { isAuthenticatedUser } from "@/backend/middlewares/auth";
 
 import onError from "@/backend/middlewares/errors";
