@@ -54,8 +54,16 @@ const handler = NextAuth({
       else if (new URL(url).origin === baseUrl) return url;
       return baseUrl;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user, _, __, trigger, session }) {
       user && (token.user = user);
+      if (trigger === "update" && session?.user) {
+        if (session?.user?.name) {
+          token.user.name = session.user.name;
+        }
+        if (session?.user?.email) {
+          token.user.email = session.user.email;
+        }
+      }
       return token;
     },
 

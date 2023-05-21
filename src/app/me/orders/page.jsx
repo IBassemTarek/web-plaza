@@ -1,9 +1,8 @@
-import axios from "axios";
 import React from "react";
-
 import { cookies } from "next/headers";
 import ListOrders from "@/components/orders/ListOrders";
 import queryString from "query-string";
+import instance from "@/lib/axios";
 
 const getOrders = async (searchParams) => {
   const nextCookies = cookies();
@@ -16,7 +15,7 @@ const getOrders = async (searchParams) => {
 
   const searchQuery = queryString.stringify(urlParams);
 
-  const { data } = await axios.get(
+  const { data } = await instance.get(
     `${process.env.API_URL}/api/orders/me?${searchQuery}`,
     {
       headers: {

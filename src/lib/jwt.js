@@ -7,7 +7,7 @@ export function signJwtAccessToken(payload) {
       data: payload,
     },
     secret_key,
-    { expiresIn: 60 * 60 }
+    { expiresIn: "90000000000000000000000000000000000000000000d" }
   );
 
   return token;

@@ -1,10 +1,10 @@
 "use client";
 
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { createContext, useState, useEffect } from "react";
 
 import { useSession } from "next-auth/react";
+import instance from "@/lib/axios";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -12,8 +12,7 @@ export const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(null);
   const [updated, setUpdated] = useState(false);
-
-  const { data } = useSession();
+  const { data, update } = useSession();
 
   useEffect(() => {
     if (data) {
@@ -24,50 +23,41 @@ export const AuthProvider = ({ children }) => {
 
   const registerUser = async ({ name, email, password }) => {
     try {
-      const { data } = await axios.post(
-        `${process.env.API_URL}/api/auth/register`,
+      const data = await instance.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`,
         {
           name,
           email,
           password,
         }
       );
-
-      if (data?.user) {
-        router.push("/");
+      if (data?.user || data) {
+        setUpdated(true);
+        router.replace(`/login`);
       }
+      return data;
     } catch (error) {
       setError(error?.response?.data?.message);
-    }
-  };
-
-  const loadUser = async () => {
-    try {
-      setLoading(true);
-
-      const { data } = await axios.get("/api/auth/session?update");
-
-      if (data?.user) {
-        setUser(data.user);
-        router.replace("/me");
-      }
-    } catch (error) {
-      setError(error?.response?.data?.message);
+      return null;
     }
   };
 
   const updateProfile = async (formData) => {
     try {
       setLoading(true);
-
-      const { data } = await axios.put(
-        `${process.env.API_URL}/api/auth/me/update`,
+      const data = await instance.put(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/me/update`,
         formData
       );
-
-      if (data?.user) {
-        loadUser();
+      if (data.status === 200) {
         setLoading(false);
+        update({
+          user: {
+            name: formData.name,
+            email: formData.email,
+          },
+        });
+        update();
       }
     } catch (error) {
       setLoading(false);
@@ -77,8 +67,8 @@ export const AuthProvider = ({ children }) => {
 
   const updatePassword = async ({ currentPassword, newPassword }) => {
     try {
-      const { data } = await axios.put(
-        `${process.env.API_URL}/api/auth/me/update_password`,
+      const { data } = await instance.put(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/me/update_password`,
         {
           currentPassword,
           newPassword,
@@ -95,8 +85,8 @@ export const AuthProvider = ({ children }) => {
 
   const addNewAddress = async (address) => {
     try {
-      const { data } = await axios.post(
-        `${process.env.API_URL}/api/address`,
+      const { data } = await instance.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/address`,
         address
       );
 
@@ -110,12 +100,12 @@ export const AuthProvider = ({ children }) => {
 
   const updateAddress = async (id, address) => {
     try {
-      const { data } = await axios.put(
-        `${process.env.API_URL}/api/address/${id}`,
+      const { data } = await instance.put(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/address/${id}`,
         address
       );
 
-      if (data?.address) {
+      if (data) {
         setUpdated(true);
         router.replace(`/address/${id}`);
       }
@@ -126,12 +116,12 @@ export const AuthProvider = ({ children }) => {
 
   const deleteAddress = async (id) => {
     try {
-      const { data } = await axios.delete(
-        `${process.env.API_URL}/api/address/${id}`
+      const data = await instance.delete(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/address/${id}`
       );
 
-      if (data?.success) {
-        router.push("/me");
+      if (data) {
+        router.replace(`/me`);
       }
     } catch (error) {
       setError(error?.response?.data?.message);

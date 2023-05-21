@@ -4,25 +4,32 @@ import Link from "next/link";
 import React, { useState, useContext, useEffect } from "react";
 import AuthContext from "@/context/AuthContext";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const Register = () => {
-  const { error, registerUser, clearErrors } = useContext(AuthContext);
-
+  const { error, registerUser, clearErrors, setUpdated, updated } =
+    useContext(AuthContext);
+  const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   useEffect(() => {
+    if (updated) {
+      toast.success("User Registered");
+      setUpdated(false);
+      router.push("/login");
+    }
     if (error) {
       toast.error(error);
       clearErrors();
     }
-  }, [error]);
+  }, [error, updated]);
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
 
-    registerUser({ name, email, password });
+    const data = await registerUser({ name, email, password });
   };
 
   return (

@@ -1,13 +1,8 @@
-import nc from "next-connect";
 import dbConnect from "@/backend/config/dbConnect";
-import onError from "@/backend/middlewares/errors";
-import { isAuthenticatedUser } from "@/backend/middlewares/auth";
-import { checkoutSession } from "@/backend/services/orderService";
+import { CheckoutSession } from "@/backend/services/order_service";
+import cors from "@/backend/utils/cors";
 
-const handler = nc({ onError });
-
-dbConnect();
-
-handler.use(isAuthenticatedUser).post(checkoutSession);
-
-export default handler;
+export async function POST(request) {
+  dbConnect();
+  return cors(request, await CheckoutSession(request));
+}

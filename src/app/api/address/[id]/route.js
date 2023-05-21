@@ -1,20 +1,25 @@
-import nc from "next-connect";
 import dbConnect from "@/backend/config/dbConnect";
 import {
-  deleteAddress,
-  getAddress,
-  updateAddress,
+  DeleteAddress,
+  GetAddress,
+  UpdateAddress,
 } from "@/backend/services/address_service";
-import { isAuthenticatedUser } from "@/backend/middlewares/auth";
+import cors from "@/backend/utils/cors";
 
-import onError from "@/backend/middlewares/errors";
+export async function GET(request, context) {
+  const { params } = context;
+  dbConnect();
+  return await GetAddress(params?.id, request);
+}
 
-const handler = nc({ onError });
+export async function PUT(request, context) {
+  const { params } = context;
+  dbConnect();
+  return cors(request, await UpdateAddress(params?.id, request));
+}
 
-dbConnect();
-
-handler.use(isAuthenticatedUser).get(getAddress);
-handler.use(isAuthenticatedUser).put(updateAddress);
-handler.use(isAuthenticatedUser).delete(deleteAddress);
-
-export default handler;
+export async function DELETE(request, context) {
+  const { params } = context;
+  dbConnect();
+  return cors(request, await DeleteAddress(params?.id, request));
+}

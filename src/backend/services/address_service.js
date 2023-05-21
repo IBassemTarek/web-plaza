@@ -1,19 +1,29 @@
 import { getToken } from "next-auth/jwt";
 import { isAuthenticatedUser } from "../middlewares/auth";
 import Address from "../models/address";
-import ErrorHandler from "../utils/errorHandler";
 
-export const NewAddress = async (req, res) => {
-  req.body.user = req.user._id;
-
-  const address = await Address.create(req.body);
-
-  res.status(200).json({
-    address,
+export const NewAddress = async (req) => {
+  const session = await getToken({
+    req,
+    secret: process.env.NEXTAUTH_SECRET,
   });
+  const user = isAuthenticatedUser(session?.user?.accessToken);
+  if (user) {
+    const data = await req.json();
+    const userId = JSON.parse(user.data);
+    data.user = userId._id;
+    const address = await Address.create(data);
+    return new Response(JSON.stringify(address), {
+      status: 200,
+    });
+  } else {
+    return new Response(JSON.stringify({ message: "unAuthorized" }), {
+      status: 401,
+    });
+  }
 };
 
-export const GetAddresses = async (req, res) => {
+export const GetAddresses = async (req) => {
   const session = await getToken({
     req,
     secret: process.env.NEXTAUTH_SECRET,
@@ -25,45 +35,90 @@ export const GetAddresses = async (req, res) => {
     return new Response(JSON.stringify(addresses), {
       status: 200,
     });
+  } else {
+    return new Response(JSON.stringify({ message: "unAuthorized" }), {
+      status: 401,
+    });
   }
 };
 
-export const getAddress = async (req, res, next) => {
-  const address = await Address.findById(req.query.id);
+export const GetAddress = async (id, req) => {
+  const session = await getToken({
+    req,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
+  const user = isAuthenticatedUser(session?.user?.accessToken);
+  if (!user) {
+    return new Response(JSON.stringify({ message: "Unauthorized" }), {
+      status: 401,
+    });
+  }
+  const address = await Address.findById(id);
 
   if (!address) {
-    return next(new ErrorHandler("Address not found", 404));
+    return new Response(JSON.stringify({ message: "Address not found" }), {
+      status: 404,
+    });
   }
-
-  res.status(200).json({
-    address,
+  return new Response(JSON.stringify(address), {
+    status: 200,
   });
 };
 
-export const updateAddress = async (req, res, next) => {
-  let address = await Address.findById(req.query.id);
+export const UpdateAddress = async (id, req) => {
+  const session = await getToken({
+    req,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
+  const user = isAuthenticatedUser(session?.user?.accessToken);
+  if (!user) {
+    return new Response(JSON.stringify({ message: "Unauthorized" }), {
+      status: 401,
+    });
+  }
+  let address = await Address.findById(id);
 
   if (!address) {
-    return next(new ErrorHandler("Address not found", 404));
+    return new Response(JSON.stringify({ message: "Address not found" }), {
+      status: 404,
+    });
   }
+  const data = await req.json();
 
-  address = await Address.findByIdAndUpdate(req.query.id, req.body);
+  address = await Address.findByIdAndUpdate(id, data);
 
-  res.status(200).json({
-    address,
+  return new Response(JSON.stringify(address), {
+    status: 200,
   });
 };
 
-export const deleteAddress = async (req, res, next) => {
-  let address = await Address.findById(req.query.id);
+export const DeleteAddress = async (id, req) => {
+  const session = await getToken({
+    req,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
+  const user = isAuthenticatedUser(session?.user?.accessToken);
+  if (!user) {
+    return new Response(JSON.stringify({ message: "Unauthorized" }), {
+      status: 401,
+    });
+  }
+  let address = await Address.findById(id);
 
   if (!address) {
-    return next(new ErrorHandler("Address not found", 404));
+    return new Response(JSON.stringify({ message: "Address not found" }), {
+      status: 404,
+    });
   }
 
-  await address.remove();
+  await Address.findByIdAndDelete(id);
 
-  res.status(200).json({
-    success: true,
-  });
+  return new Response(
+    {
+      success: true,
+    },
+    {
+      status: 200,
+    }
+  );
 };

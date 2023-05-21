@@ -1,16 +1,8 @@
-import nc from "next-connect";
 import dbConnect from "@/backend/config/dbConnect";
-import onError from "@/backend/middlewares/errors";
-import {
-  authorizeRoles,
-  isAuthenticatedUser,
-} from "@/backend/middlewares/auth";
-import { newProduct } from "@/backend/services/product_service";
+import { NewProduct } from "@/backend/services/product_service";
+import cors from "@/backend/utils/cors";
 
-const handler = nc({ onError });
-
-dbConnect();
-
-handler.use(isAuthenticatedUser, authorizeRoles("admin")).post(newProduct);
-
-export default handler;
+export async function POST(request) {
+  dbConnect();
+  return cors(request, await NewProduct(request));
+}

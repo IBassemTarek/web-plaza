@@ -1,12 +1,8 @@
-import nc from "next-connect";
 import dbConnect from "@/backend/config/dbConnect";
-import { registerUser } from "@/backend/services/auth_service";
-import onError from "@/backend/middlewares/errors";
+import { RegisterUser } from "@/backend/services/auth_service";
+import cors from "@/backend/utils/cors";
 
-const handler = nc({ onError });
-
-dbConnect();
-
-handler.post(registerUser);
-
-export default handler;
+export async function POST(request) {
+  dbConnect();
+  return cors(request, await RegisterUser(request));
+}

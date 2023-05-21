@@ -1,9 +1,8 @@
 "use client";
-
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { createContext, useState } from "react";
 import Router from "next/router";
+import instance from "@/lib/axios";
 const ProductContext = createContext();
 
 export const ProductProvider = ({ children }) => {
@@ -16,8 +15,8 @@ export const ProductProvider = ({ children }) => {
   const newProduct = async (product) => {
     try {
       setLoading(true);
-      const { data } = await axios.post(
-        `${process.env.API_URL}/api/admin/products`,
+      const { data } = await instance.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/products`,
         product
       );
 
@@ -35,8 +34,8 @@ export const ProductProvider = ({ children }) => {
   const deleteProduct = async (productId) => {
     try {
       setLoading(true);
-      await axios.delete(
-        `${process.env.API_URL}/api/admin/products/${productId}`
+      await instance.delete(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/products/${productId}`
       );
       setLoading(false);
       Router.reload();
@@ -49,12 +48,12 @@ export const ProductProvider = ({ children }) => {
   const updateProduct = async (id, product) => {
     try {
       setLoading(true);
-      const { data } = await axios.put(
-        `${process.env.API_URL}/api/admin/products/${id}`,
+      const { data } = await instance.put(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/products/${id}`,
         product
       );
 
-      if (data?.product) {
+      if (data) {
         setLoading(false);
         setUpdated(true);
         router.replace(`/admin/products`);

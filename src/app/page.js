@@ -1,9 +1,9 @@
 import React from "react";
-import axios from "axios";
 import ListProducts from "@/components/products/ListProducts";
 
 import queryString from "query-string";
 import { cookies } from "next/headers";
+import instance from "@/lib/axios";
 
 const getProducts = async (searchParams) => {
   const nextCookies = cookies();
@@ -19,7 +19,7 @@ const getProducts = async (searchParams) => {
 
   const searchQuery = queryString.stringify(urlParams);
 
-  const { data } = await axios.get(
+  const { data } = await instance.get(
     `${process.env.API_URL}/api/products?${searchQuery}`,
     {
       headers: {

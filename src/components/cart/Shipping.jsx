@@ -1,11 +1,11 @@
 "use client";
 
 import CartContext from "@/context/CartContext";
-import axios from "axios";
 import Link from "next/link";
 import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import BreadCrumbs from "../layouts/BreadCrumbs";
+import instance from "@/lib/axios";
 
 const Shipping = ({ addresses }) => {
   const { cart } = useContext(CartContext);
@@ -21,8 +21,8 @@ const Shipping = ({ addresses }) => {
       return toast.error("Please select your shipping address");
     }
     try {
-      const { data } = await axios.post(
-        `${process.env.API_URL}/api/orders/checkout_session`,
+      const { data } = await instance.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/orders/checkout_session`,
         {
           items: cart?.cartItems,
           shippingInfo,

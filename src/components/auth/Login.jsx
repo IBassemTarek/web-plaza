@@ -27,11 +27,12 @@ const Login = () => {
     });
 
     setLoading(false);
+    console.log(data);
     if (data?.error) {
       toast.error(data?.error);
     }
 
-    if (data?.ok) {
+    if (!data?.error && data?.ok) {
       router.push("/");
     }
   };

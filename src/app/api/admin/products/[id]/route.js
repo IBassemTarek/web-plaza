@@ -1,20 +1,18 @@
-import nc from "next-connect";
 import dbConnect from "@/backend/config/dbConnect";
-import onError from "@/backend/middlewares/errors";
+import cors from "@/backend/utils/cors";
 import {
-  authorizeRoles,
-  isAuthenticatedUser,
-} from "@/backend/middlewares/auth";
-import {
-  deleteProduct,
-  updateProduct,
+  DeleteProduct,
+  UpdateProduct,
 } from "@/backend/services/product_service";
 
-const handler = nc({ onError });
+export async function DELETE(request, context) {
+  const { params } = context;
+  dbConnect();
+  return await DeleteProduct(params?.id, request);
+}
 
-dbConnect();
-
-handler.use(isAuthenticatedUser, authorizeRoles("admin")).delete(deleteProduct);
-handler.use(isAuthenticatedUser, authorizeRoles("admin")).put(updateProduct);
-
-export default handler;
+export async function PUT(request, context) {
+  const { params } = context;
+  dbConnect();
+  return cors(request, await UpdateProduct(params?.id, request));
+}

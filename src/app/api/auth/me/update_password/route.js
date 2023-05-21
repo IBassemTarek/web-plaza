@@ -1,13 +1,7 @@
-import nc from "next-connect";
 import dbConnect from "@/backend/config/dbConnect";
-import { updatePassword } from "@/backend/services/auth_service";
-import onError from "@/backend/middlewares/errors";
-import { isAuthenticatedUser } from "@/backend/middlewares/auth";
+import { UpdatePassword } from "@/backend/services/auth_service";
 
-const handler = nc({ onError });
-
-dbConnect();
-
-handler.use(isAuthenticatedUser).put(updatePassword);
-
-export default handler;
+export async function PUT(request) {
+  dbConnect();
+  return await UpdatePassword(request);
+}

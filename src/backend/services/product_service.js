@@ -1,39 +1,84 @@
+import { getToken } from "next-auth/jwt";
 import Product from "../models/product";
 import APIFilters from "../utils/APIFilters";
+import { isAuthenticatedUser } from "../middlewares/auth";
 
-export const newProduct = async (req, res, next) => {
-  req.body.user = req.user._id;
+export const NewProduct = async (req) => {
+  const session = await getToken({
+    req,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
+  const user = isAuthenticatedUser(session?.user?.accessToken);
+  if (!user) {
+    return new Response(JSON.stringify({ message: "Unauthorized" }), {
+      status: 401,
+    });
+  }
+  const userId = JSON.parse(user.data);
 
-  const product = await Product.create(req.body);
-  res.status(201).json({
-    product,
+  const data = await req.json();
+  data.user = userId._id;
+
+  const product = await Product.create(data);
+  return new Response(JSON.stringify(product), {
+    status: 201,
   });
 };
 
-export const updateProduct = async (req, res, next) => {
-  let product = await Product.findById(req.query.id);
+export const UpdateProduct = async (id, req) => {
+  const session = await getToken({
+    req,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
+  const user = isAuthenticatedUser(session?.user?.accessToken);
+  if (!user) {
+    return new Response(JSON.stringify({ message: "Unauthorized" }), {
+      status: 401,
+    });
+  }
+  let product = await Product.findById(id);
 
   if (!product) {
-    return next(new ErrorHandler("product not found", 404));
+    return new Response(JSON.stringify({ message: "product not found" }), {
+      status: 404,
+    });
   }
-  product = await Product.findByIdAndUpdate(req.query.id, req.body);
-  res.status(200).json({
-    product,
+  const data = await req.json();
+  product = await Product.findByIdAndUpdate(id, data);
+  return new Response(JSON.stringify(product), {
+    status: 200,
   });
 };
 
-export const deleteProduct = async (req, res) => {
-  let product = await Product.findById(req.query.id);
+export const DeleteProduct = async (id, req) => {
+  const session = await getToken({
+    req,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
+  const user = isAuthenticatedUser(session?.user?.accessToken);
+  if (!user) {
+    return new Response(JSON.stringify({ message: "Unauthorized" }), {
+      status: 401,
+    });
+  }
+  let product = await Product.findById(id);
 
   if (!product) {
-    return next(new ErrorHandler("product not found", 404));
+    return new Response(JSON.stringify({ message: "product not found" }), {
+      status: 404,
+    });
   }
 
-  await product.remove();
+  await Product.findByIdAndDelete(id);
 
-  res.status(200).json({
-    success: true,
-  });
+  return new Response(
+    {
+      success: true,
+    },
+    {
+      status: 200,
+    }
+  );
 };
 
 export const GetProducts = async (searchParams) => {
