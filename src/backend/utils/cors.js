@@ -74,7 +74,6 @@ export default async function cors(req, res, options) {
     else headers.set(k, v);
   };
 
-  // If there's no origin we won't touch the response
   if (!originHeaders) return res;
 
   originHeaders.forEach(mergeHeaders);
@@ -113,7 +112,6 @@ export default async function cors(req, res, options) {
     return new Response(null, { status: opts.optionsSuccessStatus, headers });
   }
 
-  // If we got here, it's a normal request
   return res;
 }
 
