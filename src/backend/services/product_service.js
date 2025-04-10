@@ -39,7 +39,6 @@ export const deleteProduct = async (req, res) => {
 export const GetProducts = async (searchParams) => {
   const resPerPage = 6;
   const productsCount = await Product.countDocuments();
-
   const apiFilters = new APIFilters(Product.find(), searchParams)
     .search()
     .filter();
