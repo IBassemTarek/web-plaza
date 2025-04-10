@@ -1,4 +1,4 @@
-import nc from "next-connect";
+import { createRouter } from "next-connect";
 import dbConnect from "@/backend/config/dbConnect";
 import onError from "@/backend/middlewares/errors";
 import {
@@ -10,7 +10,7 @@ import {
   updateProduct,
 } from "@/backend/services/product_service";
 
-const handler = nc({ onError });
+const handler = createRouter({ onError });
 
 dbConnect();
 

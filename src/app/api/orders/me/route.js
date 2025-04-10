@@ -1,13 +1,13 @@
-import nc from "next-connect";
 import dbConnect from "@/backend/config/dbConnect";
-import onError from "@/backend/middlewares/errors";
-import { isAuthenticatedUser } from "@/backend/middlewares/auth";
+import errorHandler from "@/backend/middlewares/errors";
 import { myOrders } from "@/backend/services/orderService";
-
-const handler = nc({ onError });
 
 dbConnect();
 
-handler.use(isAuthenticatedUser).get(myOrders);
-
-export default handler;
+export async function GET(request) {
+  try {
+    return await myOrders(request);
+  } catch (err) {
+    return errorHandler(err);
+  }
+}

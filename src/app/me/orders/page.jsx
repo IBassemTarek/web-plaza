@@ -17,7 +17,7 @@ const getOrders = async (searchParams) => {
   const searchQuery = queryString.stringify(urlParams);
 
   const { data } = await axios.get(
-    `${process.env.API_URL}/api/orders/me?${searchQuery}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/orders/me?${searchQuery}`,
     {
       headers: {
         Cookie: `next-auth.session-token=${nextAuthSessionToken?.value}`,

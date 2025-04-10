@@ -24,14 +24,11 @@ export const AuthProvider = ({ children }) => {
 
   const registerUser = async ({ name, email, password }) => {
     try {
-      const { data } = await axios.post(
-        `${process.env.API_URL}/api/auth/register`,
-        {
-          name,
-          email,
-          password,
-        }
-      );
+      const { data } = await axios.post(`/api/auth/register`, {
+        name,
+        email,
+        password,
+      });
 
       if (data?.user) {
         router.push("/");
@@ -61,7 +58,7 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
 
       const { data } = await axios.put(
-        `${process.env.API_URL}/api/auth/me/update`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/me/update`,
         formData
       );
 
@@ -78,7 +75,7 @@ export const AuthProvider = ({ children }) => {
   const updatePassword = async ({ currentPassword, newPassword }) => {
     try {
       const { data } = await axios.put(
-        `${process.env.API_URL}/api/auth/me/update_password`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/me/update_password`,
         {
           currentPassword,
           newPassword,
@@ -95,10 +92,7 @@ export const AuthProvider = ({ children }) => {
 
   const addNewAddress = async (address) => {
     try {
-      const { data } = await axios.post(
-        `${process.env.API_URL}/api/address`,
-        address
-      );
+      const { data } = await axios.post(`/api/address`, address);
 
       if (data) {
         router.push("/me");
@@ -110,10 +104,7 @@ export const AuthProvider = ({ children }) => {
 
   const updateAddress = async (id, address) => {
     try {
-      const { data } = await axios.put(
-        `${process.env.API_URL}/api/address/${id}`,
-        address
-      );
+      const { data } = await axios.put(`/api/address/${id}`, address);
 
       if (data?.address) {
         setUpdated(true);
@@ -126,9 +117,7 @@ export const AuthProvider = ({ children }) => {
 
   const deleteAddress = async (id) => {
     try {
-      const { data } = await axios.delete(
-        `${process.env.API_URL}/api/address/${id}`
-      );
+      const { data } = await axios.delete(`/api/address/${id}`);
 
       if (data?.success) {
         router.push("/me");

@@ -1,12 +1,15 @@
-import nc from "next-connect";
 import dbConnect from "@/backend/config/dbConnect";
 import { registerUser } from "@/backend/services/auth_service";
-import onError from "@/backend/middlewares/errors";
+import errorHandler from "@/backend/middlewares/errors";
 
-const handler = nc({ onError });
-
+// Connect to DB
 dbConnect();
 
-handler.post(registerUser);
-
-export default handler;
+// POST method handler
+export async function POST(req) {
+  try {
+    return await registerUser(req);
+  } catch (err) {
+    return errorHandler(err);
+  }
+}

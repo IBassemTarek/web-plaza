@@ -2,15 +2,51 @@ import { getToken } from "next-auth/jwt";
 import { isAuthenticatedUser } from "../middlewares/auth";
 import Address from "../models/address";
 import ErrorHandler from "../utils/errorHandler";
+import { NextResponse } from "next/server";
 
 export const NewAddress = async (req, res) => {
-  req.body.user = req.user._id;
-
-  const address = await Address.create(req.body);
-
-  res.status(200).json({
-    address,
+  const session = await getToken({
+    req,
+    secret: process.env.NEXTAUTH_SECRET,
   });
+  const user = isAuthenticatedUser(session?.user?.accessToken);
+  if (!user) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: "User not authenticated",
+      },
+      { status: 401 }
+    );
+  }
+
+  const userData = JSON.parse(user.data);
+
+  const userId = userData._id;
+
+  const body = await req.json();
+
+  // Add the user ID to the request body
+  body.user = userId;
+  try {
+    const address = await Address.create(body);
+
+    return NextResponse.json(
+      {
+        success: true,
+        address,
+      },
+      { status: 201 }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Error creating address",
+      },
+      { status: 500 }
+    );
+  }
 };
 
 export const GetAddresses = async (req, res) => {
@@ -28,16 +64,26 @@ export const GetAddresses = async (req, res) => {
   }
 };
 
-export const getAddress = async (req, res, next) => {
-  const address = await Address.findById(req.query.id);
+export const GetAddress = async (req) => {
+  const address = await Address.findById(req?.query?.id);
 
   if (!address) {
-    return next(new ErrorHandler("Address not found", 404));
+    return NextResponse.json(
+      {
+        success: true,
+        message: "Address not found",
+      },
+      { status: 404 }
+    );
   }
 
-  res.status(200).json({
-    address,
-  });
+  return NextResponse.json(
+    {
+      success: true,
+      address,
+    },
+    { status: 200 }
+  );
 };
 
 export const updateAddress = async (req, res, next) => {

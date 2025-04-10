@@ -8,7 +8,7 @@ const getProduct = async (id = null) => {
   const nextAuthSessionToken = nextCookies.get("next-auth.session-token");
 
   const { data } = await axios.get(
-    `${process.env.API_URL}/api/products/${id}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/products/${id}`,
     {
       headers: {
         Cookie: `next-auth.session-token=${nextAuthSessionToken?.value}`,

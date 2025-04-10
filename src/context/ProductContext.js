@@ -17,7 +17,7 @@ export const ProductProvider = ({ children }) => {
     try {
       setLoading(true);
       const { data } = await axios.post(
-        `${process.env.API_URL}/api/admin/products`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/products`,
         product
       );
 
@@ -36,7 +36,7 @@ export const ProductProvider = ({ children }) => {
     try {
       setLoading(true);
       await axios.delete(
-        `${process.env.API_URL}/api/admin/products/${productId}`
+        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/products/${productId}`
       );
       setLoading(false);
       Router.reload();
@@ -50,7 +50,7 @@ export const ProductProvider = ({ children }) => {
     try {
       setLoading(true);
       const { data } = await axios.put(
-        `${process.env.API_URL}/api/admin/products/${id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/products/${id}`,
         product
       );
 

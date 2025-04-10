@@ -9,7 +9,7 @@ const getAddress = async (id) => {
 
   const nextAuthSessionToken = nextCookies.get("next-auth.session-token");
 
-  const { data } = await axios.get(`${process.env.API_URL}/api/address/${id}`, {
+  const { data } = await axios.get(`/api/address/${id}`, {
     headers: {
       Cookie: `next-auth.session-token=${nextAuthSessionToken?.value}`,
     },

@@ -1,15 +1,14 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-
 import User from "@/backend/models/user";
 import bcrypt from "bcryptjs";
 import dbConnect from "@/backend/config/dbConnect";
 import { signJwtAccessToken } from "@/lib/jwt";
-import UserAddresses from "@/components/user/UserAddresses";
 
-const handler = NextAuth({
+export const authOptions = {
   session: {
     strategy: "jwt",
+    jwt: true,
   },
   providers: [
     CredentialsProvider({
@@ -54,15 +53,17 @@ const handler = NextAuth({
       else if (new URL(url).origin === baseUrl) return url;
       return baseUrl;
     },
-    async jwt({ token, user }) {
-      user && (token.user = user);
+    async jwt({ token, account, user }) {
+      if (account && user) {
+        token.user = user;
+      }
       return token;
     },
 
     async session({ session, token }) {
       session.user = token.user;
-      const { password, ...userWithoutPass } = session.user;
-      session.user = userWithoutPass;
+      session.user.id = token.id || session.user._id;
+
       return session;
     },
   },
@@ -71,6 +72,19 @@ const handler = NextAuth({
     error: "/auth/error",
   },
   secret: process.env.NEXTAUTH_SECRET,
-});
+  cookies: {
+    sessionToken: {
+      name: "next-auth.session-token", // customize session cookie name if needed
+      options: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+        path: "/",
+        sameSite: "lax", // or "strict" if you want stricter cookie handling
+      },
+    },
+  },
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

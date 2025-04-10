@@ -1,19 +1,44 @@
 import User from "../models/user";
 import bcrypt from "bcryptjs";
 import ErrorHandler from "../utils/errorHandler";
+import { NextResponse } from "next/server";
 
 export const registerUser = async (req, res) => {
-  const { name, email, password } = req.body;
+  try {
+    const body = await req.json();
+    const { name, email, password } = body;
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "User already exists",
+        },
+        { status: 400 }
+      );
+    }
+    const user = await User.create({
+      name,
+      email,
+      password,
+    });
 
-  const user = await User.create({
-    name,
-    email,
-    password,
-  });
-
-  res.status(201).json({
-    user,
-  });
+    return NextResponse.json(
+      {
+        success: true,
+        user,
+      },
+      { status: 201 }
+    );
+  } catch (error) {
+    return new NextResponse(
+      JSON.stringify({
+        success: false,
+        message: err.message,
+      }),
+      { status: 500 }
+    );
+  }
 };
 
 export const UpdateProfile = async (req) => {

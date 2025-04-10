@@ -1,13 +1,13 @@
-import nc from "next-connect";
 import dbConnect from "@/backend/config/dbConnect";
-import onError from "@/backend/middlewares/errors";
-import { isAuthenticatedUser } from "@/backend/middlewares/auth";
-import { checkoutSession } from "@/backend/services/orderService";
-
-const handler = nc({ onError });
+import errorHandler from "@/backend/middlewares/errors";
+import { CheckoutSession } from "@/backend/services/orderService";
 
 dbConnect();
 
-handler.use(isAuthenticatedUser).post(checkoutSession);
-
-export default handler;
+export async function POST(request) {
+  try {
+    return await CheckoutSession(request);
+  } catch (err) {
+    return errorHandler(err);
+  }
+}
