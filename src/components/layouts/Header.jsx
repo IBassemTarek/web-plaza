@@ -1,16 +1,36 @@
 "use client";
 
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import Link from "next/link";
 import Search from "./Search";
 import Image from "next/image";
 import CartContext from "@/context/CartContext";
 import AuthContext from "@/context/AuthContext";
+import { useSession } from "next-auth/react";
 
 const Header = () => {
-  const { user } = useContext(AuthContext);
+  const { user, refreshUserSession } = useContext(AuthContext);
   const { cart } = useContext(CartContext);
   const cartItems = cart?.cartItems;
+  const { data: session } = useSession();
+
+  // Add an effect to ensure session sync
+  useEffect(() => {
+    // If there's a session but no user in context, refresh the user context
+    if (session?.user && !user) {
+      refreshUserSession();
+    }
+  }, [session, user, refreshUserSession]);
+
+  // User profile click handler with pre-fetch
+  const handleProfileClick = async (e) => {
+    // Only perform this if there's a user
+    if (user) {
+      // Optional: You could prefetch the profile page here
+      // This helps ensure the session is ready before navigation
+      await refreshUserSession();
+    }
+  };
 
   return (
     <header className="bg-white py-2 border-b">
@@ -47,9 +67,9 @@ const Header = () => {
                 <span className="hidden lg:inline ml-1">Sign in</span>
               </Link>
             ) : (
-              <Link href="/me">
+              <Link href="/me" onClick={handleProfileClick}>
                 <div className="cursor-pointer space-x-3 w-10 h-10 bg-black text-white rounded-full overflow-hidden flex justify-center items-center">
-                  <p>{user?.name.charAt(0)}</p>
+                  <p>{user?.name?.charAt(0) || "U"}</p>
                 </div>
               </Link>
             )}
