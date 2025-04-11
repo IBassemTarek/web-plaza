@@ -1,37 +1,55 @@
-import axios from "axios";
-import React from "react";
+"use client";
 
-import { cookies } from "next/headers";
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import ListOrders from "@/components/orders/ListOrders";
-import queryString from "query-string";
+import axios from "axios";
 
-const getOrders = async (searchParams) => {
-  const nextCookies = cookies();
+export default function MyOrdersPage() {
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
-  const nextAuthSessionToken = nextCookies.get("next-auth.session-token");
-
-  const urlParams = {
-    page: searchParams.page || 1,
-  };
-
-  const searchQuery = queryString.stringify(urlParams);
-
-  const { data } = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/orders/me?${searchQuery}`,
-    {
-      headers: {
-        Cookie: `next-auth.session-token=${nextAuthSessionToken?.value}`,
-      },
+  // Check authentication
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.replace("/login");
     }
-  );
+  }, [status, router]);
 
-  return data;
-};
+  // Fetch orders client-side
+  useEffect(() => {
+    const fetchOrders = async () => {
+      if (status === "authenticated") {
+        try {
+          const { data } = await axios.get("/api/orders/me");
+          setOrders(data);
+        } catch (error) {
+          console.error("Error fetching orders:", error);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
 
-const MyOrdersPage = async ({ searchParams }) => {
-  const orders = await getOrders(searchParams);
+    if (status !== "loading") {
+      fetchOrders();
+    }
+  }, [status]);
+
+  if (status === "loading" || loading) {
+    return (
+      <div className="flex justify-center items-center p-4">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
+
+  if (status === "unauthenticated") {
+    return null; // Will redirect in the useEffect
+  }
 
   return <ListOrders orders={orders} />;
-};
-
-export default MyOrdersPage;
+}
