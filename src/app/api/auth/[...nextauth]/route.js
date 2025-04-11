@@ -8,12 +8,11 @@ import { signJwtAccessToken } from "@/lib/jwt";
 export const authOptions = {
   session: {
     strategy: "jwt",
-    jwt: true,
   },
   providers: [
     CredentialsProvider({
       async authorize(credentials, req) {
-        dbConnect();
+        await dbConnect();
         const { email, password } = credentials;
         const user = await User.findOne({ email }).select("+password");
         if (!user) {
@@ -24,8 +23,12 @@ export const authOptions = {
         if (!isPasswordMatched) {
           throw new Error("Invalid Email or Password");
         }
-        // remove password from user object
-        const { password: pass, ...userWithoutPass } = user.toObject();
+
+        // Convert mongoose document to plain object
+        const userObj = user.toObject();
+
+        // Remove password from user object
+        const { password: pass, ...userWithoutPass } = userObj;
 
         const accessToken = signJwtAccessToken(JSON.stringify(userWithoutPass));
         if (accessToken) {
@@ -41,24 +44,24 @@ export const authOptions = {
   ],
   callbacks: {
     async redirect({ url, baseUrl }) {
-      if (url.startsWith("/api/auth/session?update")) {
-        const updatedUser = await User.findById(token.user._id);
-        const accessToken = signJwtAccessToken(JSON.stringify(updatedUser));
-        token.user = {
-          ...updatedUser,
-          accessToken,
-        };
-      }
+      // Simple redirect logic without the problematic code
       if (url.startsWith("/")) return `${baseUrl}${url}`;
       else if (new URL(url).origin === baseUrl) return url;
       return baseUrl;
     },
-    async jwt({ token, user }) {
+
+    async jwt({ token, user, account, profile, trigger, session }) {
       // First login
       if (user) {
         token.user = user;
         token.accessToken = user.accessToken;
-        token.accessTokenExpires = Date.now() + 60 * 60 * 1000 * 1000; // 1000 hour
+        token.accessTokenExpires = Date.now() + 24 * 60 * 60 * 1000; // 24 hours
+        token.id = user._id || user.id; // Store the user ID
+      }
+
+      // Handle user updates
+      if (trigger === "update" && session?.user) {
+        token.user = session.user;
       }
 
       // Check if token is expired
@@ -68,19 +71,26 @@ export const authOptions = {
       if (isTokenExpired) {
         try {
           // Re-sign token with fresh user info
-          const updatedUser = await User.findById(token.user._id);
-          const newAccessToken = signJwtAccessToken(
-            JSON.stringify(updatedUser)
-          );
+          await dbConnect();
+          const updatedUser = await User.findById(token.user._id || token.id);
+
+          if (!updatedUser) {
+            throw new Error("User not found");
+          }
+
+          const userObj = updatedUser.toObject();
+          const newAccessToken = signJwtAccessToken(JSON.stringify(userObj));
+
           token.user = {
-            ...updatedUser.toObject(),
+            ...userObj,
             accessToken: newAccessToken,
           };
           token.accessToken = newAccessToken;
-          token.accessTokenExpires = Date.now() + 60 * 60 * 1000;
+          token.accessTokenExpires = Date.now() + 24 * 60 * 60 * 1000; // 24 hours
         } catch (err) {
           console.error("Token refresh failed", err);
-          throw new Error("Session expired. Please log in again.");
+          // Don't throw an error here, just return the token as is
+          // The user will be redirected to login when the session is checked
         }
       }
 
@@ -88,9 +98,11 @@ export const authOptions = {
     },
 
     async session({ session, token }) {
-      session.user = token.user;
-      session.user.id = token.id || session.user._id;
-
+      if (token?.user) {
+        session.user = token.user;
+        // Ensure ID is available in the expected format
+        session.user.id = token.id || token.user._id || token.user.id;
+      }
       return session;
     },
   },
@@ -107,9 +119,12 @@ export const authOptions = {
         secure: process.env.NODE_ENV === "production",
         path: "/",
         sameSite: "lax",
+        // Don't set domain explicitly unless you're using a custom domain
+        // domain: process.env.NODE_ENV === "production" ? undefined : undefined
       },
     },
   },
+  debug: process.env.NODE_ENV === "development",
 };
 
 const handler = NextAuth(authOptions);
