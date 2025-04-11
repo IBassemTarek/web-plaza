@@ -1,13 +1,10 @@
 "use client";
 
-import AuthContext from "@/context/AuthContext";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
-import React, { useContext } from "react";
+import React from "react";
 
 const Sidebar = () => {
-  const { user } = useContext(AuthContext);
-
   const logoutHandler = () => {
     signOut();
   };
@@ -15,31 +12,6 @@ const Sidebar = () => {
   return (
     <aside className="md:w-1/3 lg:w-1/4 px-4">
       <ul className="sidebar">
-        {user?.role === "admin" && (
-          <>
-            <li>
-              {" "}
-              <Link
-                href="/admin/products/new"
-                className="block px-3 py-2  text-gray-800 hover:bg-black hover:text-white rounded-md"
-              >
-                New Product <span className="text-red-500">(Admin)</span>
-              </Link>
-            </li>
-
-            <li>
-              {" "}
-              <Link
-                href="/admin/products"
-                className="block px-3 py-2 text-gray-800 hover:bg-black hover:text-white rounded-md"
-              >
-                All Products <span className="text-red-500">(Admin)</span>
-              </Link>
-            </li>
-            <hr />
-          </>
-        )}
-
         <li>
           {" "}
           <Link

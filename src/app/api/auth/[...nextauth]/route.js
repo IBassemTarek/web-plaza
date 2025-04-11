@@ -101,12 +101,12 @@ export const authOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   cookies: {
     sessionToken: {
-      name: "next-auth.session-token", // customize session cookie name if needed
+      name: "next-auth.session-token",
       options: {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+        secure: false,
         path: "/",
-        sameSite: "lax", // or "strict" if you want stricter cookie handling
+        sameSite: "lax",
       },
     },
   },

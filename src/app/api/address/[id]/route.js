@@ -4,15 +4,9 @@ import {
   GetAddress,
   updateAddress,
 } from "@/backend/services/address_service";
-
-import onError from "@/backend/middlewares/errors";
 import errorHandler from "@/backend/middlewares/errors";
 
 dbConnect();
-
-// const handler = createRouter({ onError });
-// handler.use(isAuthenticatedUser).put(updateAddress);
-// handler.use(isAuthenticatedUser).delete(deleteAddress);
 
 export async function GET(request, { params }) {
   const id = params.id;

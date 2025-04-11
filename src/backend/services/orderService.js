@@ -1,6 +1,5 @@
 import { getToken } from "next-auth/jwt";
 import Order from "../models/order";
-import APIFilters from "../utils/APIFilters";
 import { NextResponse } from "next/server";
 import { isAuthenticatedUser } from "../middlewares/auth";
 
