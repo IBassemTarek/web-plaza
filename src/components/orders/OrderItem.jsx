@@ -2,7 +2,6 @@ import React from "react";
 import Image from "next/image";
 
 const OrderItem = ({ order }) => {
-  console.log(order);
   return (
     <article className="p-3 lg:p-5 mb-5 bg-white border border-blue-600 rounded-md">
       <header className="lg:flex justify-between mb-4">
@@ -21,28 +20,7 @@ const OrderItem = ({ order }) => {
           </p>
           <p className="text-gray-500">{order?.createAt?.substring(0, 10)} </p>
         </div>
-      </header>
-      <div className="grid md:grid-cols-3 gap-2">
-        <div>
-          <p className="text-gray-400 mb-1">Person</p>
-          <ul className="text-gray-600">
-            <li>{order?.user?.name}</li>
-            <li>Phone: {order?.shippingInfo?.phoneNo}</li>
-            <li>Email: {order?.user?.email}</li>
-          </ul>
-        </div>
-        <div>
-          <p className="text-gray-400 mb-1">Delivery address</p>
-          <ul className="text-gray-600">
-            <li>{order?.shippingInfo?.street}</li>
-            <li>
-              {order?.shippingInfo?.city}, {order?.shippingInfo?.state},{" "}
-              {order?.shippingInfo?.zipCode}
-            </li>
-            <li>{order?.shippingInfo?.country}</li>
-          </ul>
-        </div>
-      </div>
+      </header> 
 
       <hr className="my-4" />
 

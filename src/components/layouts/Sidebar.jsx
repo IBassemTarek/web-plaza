@@ -60,25 +60,6 @@ const Sidebar = () => {
         </li>
         <li>
           {" "}
-          <Link
-            href="/me/update"
-            className="block px-3 py-2 text-gray-800 hover:bg-black hover:text-white rounded-md"
-          >
-            Update Profile
-          </Link>
-        </li>
-        <li>
-          {" "}
-          <Link
-            href="/me/update_password"
-            className="block px-3 py-2 text-gray-800 hover:bg-black hover:text-white rounded-md"
-          >
-            Update Password
-          </Link>
-        </li>
-
-        <li>
-          {" "}
           <a
             className="block px-3 py-2 text-red-800 hover:bg-red-100 hover:text-white-500 rounded-md cursor-pointer"
             onClick={logoutHandler}

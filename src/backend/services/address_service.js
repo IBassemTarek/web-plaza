@@ -64,18 +64,60 @@ export const GetAddresses = async (req, res) => {
   }
 };
 
-export const GetAddress = async (req) => {
-  const address = await Address.findById(req?.query?.id);
+export const GetAddress = async (req, id) => {
+  try {
+    const session = await getToken({
+      req,
+      secret: process.env.NEXTAUTH_SECRET,
+    });
+    const user = isAuthenticatedUser(session?.user?.accessToken);
+    if (user) {
+      const address = await Address.findById(id);
+
+      if (!address) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: "Address not found",
+          },
+          { status: 404 }
+        );
+      }
+
+      return NextResponse.json(
+        {
+          success: true,
+          address,
+        },
+        { status: 200 }
+      );
+    }
+  } catch (error) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: error,
+      },
+      { status: 500 }
+    );
+  }
+};
+
+export const updateAddress = async (req, id) => {
+  let address = await Address.findById(id);
 
   if (!address) {
     return NextResponse.json(
       {
-        success: true,
+        success: false,
         message: "Address not found",
       },
       { status: 404 }
     );
   }
+
+  const body = await req.json();
+  address = await Address.findByIdAndUpdate(id, body);
 
   return NextResponse.json(
     {
@@ -86,30 +128,26 @@ export const GetAddress = async (req) => {
   );
 };
 
-export const updateAddress = async (req, res, next) => {
-  let address = await Address.findById(req.query.id);
+export const deleteAddress = async (req, id) => {
+  let address = await Address.findById(id);
 
   if (!address) {
-    return next(new ErrorHandler("Address not found", 404));
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Address not found",
+      },
+      { status: 404 }
+    );
   }
 
-  address = await Address.findByIdAndUpdate(req.query.id, req.body);
+  // Delete the address
+  await Address.findByIdAndDelete(id);
 
-  res.status(200).json({
-    address,
-  });
-};
-
-export const deleteAddress = async (req, res, next) => {
-  let address = await Address.findById(req.query.id);
-
-  if (!address) {
-    return next(new ErrorHandler("Address not found", 404));
-  }
-
-  await address.remove();
-
-  res.status(200).json({
-    success: true,
-  });
+  return NextResponse.json(
+    {
+      success: true,
+    },
+    { status: 200 }
+  );
 };

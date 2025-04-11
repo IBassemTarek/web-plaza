@@ -53,10 +53,37 @@ export const authOptions = {
       else if (new URL(url).origin === baseUrl) return url;
       return baseUrl;
     },
-    async jwt({ token, account, user }) {
-      if (account && user) {
+    async jwt({ token, user }) {
+      // First login
+      if (user) {
         token.user = user;
+        token.accessToken = user.accessToken;
+        token.accessTokenExpires = Date.now() + 60 * 60 * 1000 * 1000; // 1000 hour
       }
+
+      // Check if token is expired
+      const isTokenExpired =
+        token.accessTokenExpires && Date.now() > token.accessTokenExpires;
+
+      if (isTokenExpired) {
+        try {
+          // Re-sign token with fresh user info
+          const updatedUser = await User.findById(token.user._id);
+          const newAccessToken = signJwtAccessToken(
+            JSON.stringify(updatedUser)
+          );
+          token.user = {
+            ...updatedUser.toObject(),
+            accessToken: newAccessToken,
+          };
+          token.accessToken = newAccessToken;
+          token.accessTokenExpires = Date.now() + 60 * 60 * 1000;
+        } catch (err) {
+          console.error("Token refresh failed", err);
+          throw new Error("Session expired. Please log in again.");
+        }
+      }
+
       return token;
     },
 

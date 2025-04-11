@@ -30,7 +30,7 @@ const Shipping = ({ addresses }) => {
       );
       window.location.href = data.url;
     } catch (error) {
-      console.log(error.response);
+      toast.error(error?.response?.data?.message);
     }
   };
 

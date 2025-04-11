@@ -8,12 +8,14 @@ const getAddress = async (id) => {
   const nextCookies = cookies();
 
   const nextAuthSessionToken = nextCookies.get("next-auth.session-token");
-
-  const { data } = await axios.get(`/api/address/${id}`, {
-    headers: {
-      Cookie: `next-auth.session-token=${nextAuthSessionToken?.value}`,
-    },
-  });
+  const { data } = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/address/${id}`,
+    {
+      headers: {
+        Cookie: `next-auth.session-token=${nextAuthSessionToken?.value}`,
+      },
+    }
+  );
 
   return data?.address;
 };

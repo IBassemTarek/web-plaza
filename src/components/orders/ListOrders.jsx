@@ -23,14 +23,14 @@ const ListOrders = ({ orders }) => {
   return (
     <>
       <h3 className="text-xl font-semibold mb-5">Your Orders</h3>
-      {orders?.orders?.map((order, i) => (
+      {orders?.map((order, i) => (
         <OrderItem key={i} order={order} />
       ))}
 
-      <CustomPagination
+      {/* <CustomPagination
         resPerPage={orders?.resPerPage}
         productsCount={orders?.ordersCount}
-      />
+      /> */}
     </>
   );
 };

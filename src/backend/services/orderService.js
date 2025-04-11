@@ -6,28 +6,18 @@ import { isAuthenticatedUser } from "../middlewares/auth";
 
 export const myOrders = async (req, res) => {
   try {
-    const resPerPage = 2;
-    const ordersCount = await Order.countDocuments();
-
-    const apiFilters = new APIFilters(Order.find(), req.query).pagination(
-      resPerPage
-    );
-
-    const orders = await apiFilters.query
-      .find({ user: req.user._id })
-      .populate("shippingInfo user");
-
-    return NextResponse.json(
-      {
-        success: true,
-        body: {
-          ordersCount,
-          resPerPage,
-          orders,
-        },
-      },
-      { status: 200 }
-    );
+    const session = await getToken({
+      req,
+      secret: process.env.NEXTAUTH_SECRET,
+    });
+    const user = isAuthenticatedUser(session?.user?.accessToken);
+    if (user) {
+      const userId = JSON.parse(user.data);
+      const orders = await Order.find({ user: userId._id });
+      return new Response(JSON.stringify(orders), {
+        status: 200,
+      });
+    }
   } catch (error) {
     return NextResponse.json(
       {

@@ -7,7 +7,7 @@ export function signJwtAccessToken(payload) {
       data: payload,
     },
     secret_key,
-    { expiresIn: 60 * 60 }
+    { expiresIn: 60 * 60 * 100000 } // 1000 hours
   );
 
   return token;
@@ -19,7 +19,6 @@ export function verifyJwt(token) {
     const decoded = jwt.verify(token, secret_key);
     return decoded;
   } catch (error) {
-    console.log(error);
     return null;
   }
 }
