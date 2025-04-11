@@ -38,21 +38,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const loadUser = async () => {
-    try {
-      setLoading(true);
-
-      const { data } = await axios.get("/api/auth/session?update");
-
-      if (data?.user) {
-        setUser(data.user);
-        router.replace("/me");
-      }
-    } catch (error) {
-      setError(error?.response?.data?.message);
-    }
-  };
-
   const addNewAddress = async (address) => {
     try {
       const { data } = await axios.post(`/api/address`, address);
