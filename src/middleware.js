@@ -2,39 +2,35 @@ import { NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 
 export async function middleware(request) {
+  // Only apply to specific protected routes
   const { pathname } = request.nextUrl;
 
-  // Check if the path is a protected route
-  const isProtectedRoute =
-    pathname.startsWith("/me") || pathname === "/shipping";
-
-  if (!isProtectedRoute) {
+  if (!pathname.startsWith("/me") && pathname !== "/shipping") {
     return NextResponse.next();
   }
 
-  // Try to get the token with more lenient settings
-  const token = await getToken({
-    req: request,
-    secret: process.env.NEXTAUTH_SECRET,
-    secureCookie: process.env.NODE_ENV === "production",
-  });
+  try {
+    // Try to verify the token with minimal configuration
+    const token = await getToken({
+      req: request,
+      secret: process.env.NEXTAUTH_SECRET,
+    });
 
-  // If there's no token and this is a protected route, redirect to login
-  if (!token && isProtectedRoute) {
-    const url = new URL("/login", request.url);
-    url.searchParams.set("callbackUrl", encodeURI(request.url));
-    return NextResponse.redirect(url);
+    if (token) {
+      return NextResponse.next();
+    } else {
+      // Only redirect if token is definitely missing
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
+  } catch (error) {
+    console.error("Middleware error:", error);
+    // If there's any error in verification, allow the request through
+    // and let client-side handle redirection if needed
+    return NextResponse.next();
   }
-
-  return NextResponse.next();
 }
 
+// Simplified matcher focusing only on the key protected routes
 export const config = {
-  matcher: [
-    // Match all protected routes
-    "/me/:path*",
-    "/shipping",
-    // But exclude API and static files
-    "/((?!api|_next/static|_next/image|favicon.ico).*)",
-  ],
+  matcher: ["/me/:path*", "/shipping"],
 };
