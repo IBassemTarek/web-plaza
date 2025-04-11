@@ -1,11 +1,11 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
-import UserAddresses from "./user/UserAddresses";
 import Link from "next/link";
 import AuthContext from "@/context/AuthContext";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import ProtectRoute from "./auth/ProtectRoute";
+import ProtectRoute from "./ProtectRoute";
+import UserAddresses from "../user/UserAddresses";
 
 const ClientProfile = ({ serverAddresses }) => {
   const { user } = useContext(AuthContext);
