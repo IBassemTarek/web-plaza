@@ -1,12 +1,22 @@
 "use client";
 
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import UserAddresses from "../user/UserAddresses";
 import Link from "next/link";
 import AuthContext from "@/context/AuthContext";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const Profile = ({ addresses }) => {
   const { user } = useContext(AuthContext);
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.replace("/login");
+    }
+  }, [status, router]);
 
   return (
     <>
