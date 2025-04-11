@@ -1,28 +1,21 @@
 "use client";
+// components/auth/ProtectRoute.js
 
-import { useContext, useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import AuthContext from "@/context/AuthContext";
+import { useEffect } from "react";
 
-// This component can be added to the top of protected pages
 export default function ProtectRoute({ children }) {
-  const { user, loading } = useContext(AuthContext);
+  const { data: session, status } = useSession();
   const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    // Check authentication status
-    if (!loading) {
-      if (!user) {
-        router.replace("/login");
-      } else {
-        setIsAuthenticated(true);
-      }
+    if (status === "unauthenticated") {
+      router.replace("/login");
     }
-  }, [user, loading, router]);
+  }, [status, router]);
 
-  // Show nothing while checking authentication
-  if (loading || !isAuthenticated) {
+  if (status === "loading") {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
@@ -30,5 +23,9 @@ export default function ProtectRoute({ children }) {
     );
   }
 
-  return children;
+  if (status === "unauthenticated") {
+    return null; // Will redirect in useEffect
+  }
+
+  return <>{children}</>;
 }

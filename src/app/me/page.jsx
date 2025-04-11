@@ -1,34 +1,37 @@
-import Profile from "@/components/auth/Profile";
-import axios from "axios";
-import React from "react";
-
+// app/me/page.js
 import { cookies } from "next/headers";
-import ProtectRoute from "@/components/auth/ProtectRoute";
+import axios from "axios";
+import Profile from "@/components/auth/Profile";
 
+// Server component - fetches data
 const getAddresses = async () => {
   const nextCookies = cookies();
-
   const nextAuthSessionToken = nextCookies.get("next-auth.session-token");
 
-  const { data } = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/address`,
-    {
-      headers: {
-        Cookie: `next-auth.session-token=${nextAuthSessionToken?.value}`,
-      },
-    }
-  );
-  return data;
+  if (!nextAuthSessionToken?.value) {
+    return { addresses: [] };
+  }
+
+  try {
+    const { data } = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/address`,
+      {
+        headers: {
+          Cookie: `next-auth.session-token=${nextAuthSessionToken?.value}`,
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.error("Error fetching addresses:", error);
+    return { addresses: [] };
+  }
 };
 
-const ProfilePage = async () => {
-  const addresses = await getAddresses();
+// Server component that passes data to client component
+export default async function ProfilePage() {
+  const data = await getAddresses();
 
-  return (
-    <ProtectRoute>
-      <Profile addresses={addresses} />
-    </ProtectRoute>
-  );
-};
-
-export default ProfilePage;
+  // Pass the pre-fetched data to the client component
+  return <Profile serverAddresses={data} />;
+}
