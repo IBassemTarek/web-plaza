@@ -1,7 +1,6 @@
 import { getToken } from "next-auth/jwt";
 import { isAuthenticatedUser } from "../middlewares/auth";
 import Address from "../models/address";
-import ErrorHandler from "../utils/errorHandler";
 import { NextResponse } from "next/server";
 
 export const NewAddress = async (req, res) => {

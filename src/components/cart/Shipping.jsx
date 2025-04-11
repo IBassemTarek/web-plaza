@@ -21,13 +21,10 @@ const Shipping = ({ addresses }) => {
       return toast.error("Please select your shipping address");
     }
     try {
-      const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/orders/checkout_session`,
-        {
-          items: cart?.cartItems,
-          shippingInfo,
-        }
-      );
+      const { data } = await axios.post(`/api/orders/checkout_session`, {
+        items: cart?.cartItems,
+        shippingInfo,
+      });
       window.location.href = data.url;
     } catch (error) {
       toast.error(error?.response?.data?.message);

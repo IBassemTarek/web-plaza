@@ -21,7 +21,8 @@ const getAddresses = async () => {
         },
       }
     );
-    return data;
+
+    return { addresses: data };
   } catch (error) {
     console.error("Error fetching addresses:", error);
     return { addresses: [] };
