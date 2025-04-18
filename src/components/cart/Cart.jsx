@@ -86,7 +86,7 @@ const Cart = () => {
                               />
                             </div>
                           </div>
-                          <figcaption className="ml-3">
+                          <figcaption className="mx-3">
                             <p>{cartItem.name}</p>
                             <p className="mt-1 text-gray-400">
                               {" "}
@@ -139,7 +139,7 @@ const Cart = () => {
                               deleteItemFromCart(cartItem?.product)
                             }
                           >
-                            Remove
+                            {t("Remove")}
                           </a>
                         </div>
                       </div>
@@ -161,7 +161,7 @@ const Cart = () => {
                           (acc, item) => acc + item.quantity,
                           0
                         )}{" "}
-                        (Units)
+                        {t("Units")}
                       </span>
                     </li>
                     <li className="flex justify-between text-gray-600  mb-1">

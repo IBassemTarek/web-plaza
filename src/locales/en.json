@@ -60,5 +60,7 @@
   "Checkout": "Checkout",
   "Back": "Back",
   "Your Orders": "Your Orders",
-  "Order ID": "Order ID"
+  "Order ID": "Order ID",
+  "Remove": "Remove",
+  "Units": "Units"
 }
