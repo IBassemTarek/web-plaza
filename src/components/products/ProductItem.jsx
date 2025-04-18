@@ -2,9 +2,11 @@ import React, { useContext } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import CartContext from "@/context/CartContext";
+import { useLocale } from "@/context/LocaleContext";
 
 const ProductItem = ({ product }) => {
   const { addItemToCart } = useContext(CartContext);
+  const { t } = useLocale();
 
   const addToCartHandler = () => {
     addItemToCart({
@@ -43,19 +45,19 @@ const ProductItem = ({ product }) => {
           </div>
         </Link>
         <div className="flex justify-between relative pt-2">
-          <div className="pl-5 pb-5">
+          <div className="px-5 pb-5">
             <span className="text-xl font-semibold text-black">
               ${product?.price}
             </span>
 
-            <p className="text-green-500">Free Shipping</p>
+            <p className="text-green-500 pb-8">{t("Free Shipping")}</p>
           </div>
           <a
             className="absolute bottom-0 right-0 px-4 py-2 inline-block text-white bg-black border-transparent rounded-br-md rounded-tl-md  cursor-pointer hover:bg-gray-800"
             onClick={addToCartHandler}
           >
             {" "}
-            Add to Cart{" "}
+            {t("add_to_cart")}
           </a>
         </div>
       </div>

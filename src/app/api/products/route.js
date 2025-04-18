@@ -1,8 +1,7 @@
 import dbConnect from "@/backend/config/dbConnect";
-import { GetProduct, GetProducts } from "@/backend/services/product_service";
+import { GetProducts } from "@/backend/services/product_service";
 
-export async function GET(request) {
-  const { searchParams } = new URL(request.url);
+export async function GET() {
   dbConnect();
-  return await GetProducts(searchParams);
+  return await GetProducts();
 }

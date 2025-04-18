@@ -7,6 +7,7 @@ import Sidebar from "../layouts/Sidebar";
 import { countries } from "countries-list";
 import AuthContext from "@/context/AuthContext";
 import { toast } from "react-toastify";
+import { useLocale } from "@/context/LocaleContext";
 
 const UpdateAddress = ({ id, address }) => {
   const {
@@ -19,7 +20,7 @@ const UpdateAddress = ({ id, address }) => {
   } = useContext(AuthContext);
 
   const countriesList = Object.values(countries);
-
+  const { t } = useLocale();
   const [street, setStreet] = useState(address.street);
   const [city, setCity] = useState(address.city);
   const [state, setState] = useState(address.state);
@@ -37,7 +38,7 @@ const UpdateAddress = ({ id, address }) => {
       toast.error(error);
       clearErrors();
     }
-  }, [error, updated]);
+  }, [error, updated, clearErrors, setUpdated]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -71,15 +72,15 @@ const UpdateAddress = ({ id, address }) => {
               >
                 <form onSubmit={submitHandler}>
                   <h2 className="mb-5 text-2xl font-semibold">
-                    Update Address
+                    {t("Update Address")}
                   </h2>
 
                   <div className="mb-4 md:col-span-2">
-                    <label className="block mb-1"> Street* </label>
+                    <label className="block mb-1"> {t("Street")}* </label>
                     <input
                       className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
                       type="text"
-                      placeholder="Type your address"
+                      placeholder={t("Type your address")}
                       value={street}
                       onChange={(e) => setStreet(e.target.value)}
                     />
@@ -87,22 +88,22 @@ const UpdateAddress = ({ id, address }) => {
 
                   <div className="grid md:grid-cols-2 gap-x-3">
                     <div className="mb-4 md:col-span-1">
-                      <label className="block mb-1"> City </label>
+                      <label className="block mb-1"> {t("City")} </label>
                       <input
                         className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
                         type="text"
-                        placeholder="Type your city"
+                        placeholder={t("Type your city")}
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
                       />
                     </div>
 
                     <div className="mb-4 md:col-span-1">
-                      <label className="block mb-1"> State </label>
+                      <label className="block mb-1"> {t("State")} </label>
                       <input
                         className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
                         type="text"
-                        placeholder="Type state here"
+                        placeholder={t("Type state here")}
                         value={state}
                         onChange={(e) => setState(e.target.value)}
                       />
@@ -111,22 +112,22 @@ const UpdateAddress = ({ id, address }) => {
 
                   <div className="grid md:grid-cols-2 gap-x-2">
                     <div className="mb-4 md:col-span-1">
-                      <label className="block mb-1"> ZIP code </label>
+                      <label className="block mb-1"> {t("ZIP code")} </label>
                       <input
                         className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
                         type="number"
-                        placeholder="Type zip code here"
+                        placeholder={t("Type zip code here")}
                         value={zipCode}
                         onChange={(e) => setZipCode(e.target.value)}
                       />
                     </div>
 
                     <div className="mb-4 md:col-span-1">
-                      <label className="block mb-1"> Phone No </label>
+                      <label className="block mb-1"> {t("Phone No")} </label>
                       <input
                         className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
                         type="number"
-                        placeholder="Type phone no here"
+                        placeholder={t("Type phone no here")}
                         value={phoneNo}
                         onChange={(e) => setPhonoNo(e.target.value)}
                       />
@@ -134,7 +135,7 @@ const UpdateAddress = ({ id, address }) => {
                   </div>
 
                   <div className="mb-4 md:col-span-2">
-                    <label className="block mb-1"> Country </label>
+                    <label className="block mb-1"> {t("Country")} </label>
                     <select
                       className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
                       value={country}
@@ -153,7 +154,7 @@ const UpdateAddress = ({ id, address }) => {
                       type="submit"
                       className="my-2 px-4 py-2 text-center w-full inline-block text-white bg-black border border-transparent rounded-md "
                     >
-                      Update
+                      {t("Update")}
                     </button>
 
                     <button
@@ -161,7 +162,7 @@ const UpdateAddress = ({ id, address }) => {
                       className="my-2 px-4 py-2 text-center w-full inline-block text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700"
                       onClick={deleteHandler}
                     >
-                      Delete
+                      {t("Delete")}
                     </button>
                   </div>
                 </form>

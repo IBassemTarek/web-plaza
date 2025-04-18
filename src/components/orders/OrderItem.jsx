@@ -1,13 +1,17 @@
 import React from "react";
 import Image from "next/image";
+import { useLocale } from "@/context/LocaleContext";
 
 const OrderItem = ({ order }) => {
+  const { t } = useLocale();
   return (
     <article className="p-3 lg:p-5 mb-5 bg-white border border-blue-600 rounded-md">
       <header className="lg:flex justify-between mb-4">
         <div className="mb-4 lg:mb-0">
           <p className="font-semibold">
-            <span>Order ID: {order?._id} </span>
+            <span>
+              {t("Order ID")}: {order?._id}{" "}
+            </span>
             {order?.orderStatus == "Processing" ? (
               <span className="text-red-500">
                 • {order?.orderStatus.toUpperCase()}
@@ -20,7 +24,7 @@ const OrderItem = ({ order }) => {
           </p>
           <p className="text-gray-500">{order?.createAt?.substring(0, 10)} </p>
         </div>
-      </header> 
+      </header>
 
       <hr className="my-4" />
 
@@ -31,14 +35,14 @@ const OrderItem = ({ order }) => {
               <div className="block w-20 h-20 rounded border border-gray-200 overflow-hidden p-1">
                 <Image
                   src={item?.image}
-                  height="60"
-                  width="60"
+                  height={60}
+                  width={60}
                   alt={item.name}
                   className="object-cover object-center h-full w-full rounded"
                 />
               </div>
             </div>
-            <figcaption className="ml-3">
+            <figcaption className="mx-3">
               <p>{item.name.substring(0, 35)}</p>
               <p className="mt-1 font-semibold">
                 {item.quantity}x = ${item.price * item.quantity}

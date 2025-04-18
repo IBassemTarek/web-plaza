@@ -1,11 +1,18 @@
+"use client";
+
 import Sidebar from "@/components/layouts/Sidebar";
+import { useLocale } from "@/context/LocaleContext";
 
 export default function UserLayout({ children }) {
+  const { t } = useLocale();
+
   return (
     <>
       <section className="py-5 sm:py-7 bg-black">
         <div className="container max-w-screen-xl mx-auto px-4">
-          <h1 className="text-bold text-2xl text-white">User Dashboard</h1>
+          <h1 className="text-bold text-2xl text-white">
+            {t("User Dashboard")}
+          </h1>
         </div>
       </section>
 

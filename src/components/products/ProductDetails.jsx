@@ -1,13 +1,15 @@
 "use client";
 
 import React, { useRef, useContext } from "react";
+import Image from "next/image";
 import BreadCrumbs from "../layouts/BreadCrumbs";
 import CartContext from "@/context/CartContext";
+import { useLocale } from "@/context/LocaleContext";
 
 const ProductDetails = ({ product }) => {
   const { addItemToCart } = useContext(CartContext);
   const imgRef = useRef(null);
-
+  const { t } = useLocale();
   const setImgPreview = (url) => {
     imgRef.current.src = url;
   };
@@ -40,7 +42,7 @@ const ProductDetails = ({ product }) => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-5">
             <aside>
               <div className="border border-gray-200 shadow-sm p-3 text-center rounded mb-5">
-                <img
+                <Image
                   ref={imgRef}
                   className="object-cover inline-block"
                   src={
@@ -49,8 +51,8 @@ const ProductDetails = ({ product }) => {
                       : "/images/default_product.png"
                   }
                   alt="Product title"
-                  width="340"
-                  height="340"
+                  width={340}
+                  height={340}
                 />
               </div>
               <div className="space-x-2 overflow-auto text-center whitespace-nowrap">
@@ -60,12 +62,12 @@ const ProductDetails = ({ product }) => {
                     className="inline-block border border-gray-200 p-1 rounded-md hover:border-blue-500 cursor-pointer"
                     onClick={() => setImgPreview(img?.url)}
                   >
-                    <img
+                    <Image
                       className="w-14 h-14"
                       src={img.url}
                       alt="Product title"
-                      width="500"
-                      height="500"
+                      width={56}
+                      height={56}
                     />
                   </a>
                 ))}
@@ -85,29 +87,31 @@ const ProductDetails = ({ product }) => {
                   disabled={!inStock}
                 >
                   <i className="fa fa-shopping-cart mr-2"></i>
-                  Add to cart
+                  {t("add_to_cart")}
                 </button>
               </div>
 
               <ul className="mb-5">
                 <li className="mb-1">
                   {" "}
-                  <b className="font-medium w-36 inline-block">Stock</b>
+                  <b className="font-medium w-36 inline-block">{t("Stock")}</b>
                   {inStock ? (
-                    <span className="text-green-500">In Stock</span>
+                    <span className="text-green-500">{t("In Stock")}</span>
                   ) : (
-                    <span className="text-red-500">Out of Stock</span>
+                    <span className="text-red-500">{t("Out of Stock")}</span>
                   )}
                 </li>
                 <li className="mb-1">
                   {" "}
-                  <b className="font-medium w-36 inline-block">Category:</b>
+                  <b className="font-medium w-36 inline-block">
+                    {t("Category")}
+                  </b>
                   <span className="text-gray-500">{product?.category}</span>
                 </li>
                 <li className="mb-1">
                   {" "}
                   <b className="font-medium w-36 inline-block">
-                    Seller / Brand:
+                    {t("Seller / Brand")}
                   </b>
                   <span className="text-gray-500">{product?.seller}</span>
                 </li>

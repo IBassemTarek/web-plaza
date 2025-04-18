@@ -7,12 +7,15 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import CartContext from "@/context/CartContext";
 import { useContext } from "react";
-import Search from "./Search";
+import LanguageSwitcher from "../languageSwitcher/LanguageSwitcher";
+import { useLocale } from "@/context/LocaleContext";
 
 const Header = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const { cart } = useContext(CartContext);
+  const { t } = useLocale();
+
   const cartItems = cart?.cartItems;
 
   // Use direct navigation instead of Link component
@@ -39,16 +42,24 @@ const Header = () => {
               />
             </a>
           </div>
-          <Search />
 
-          <div className="flex items-center space-x-2 ml-auto">
+          <div className="flex items-center space-x-2">
+            <LanguageSwitcher />
+            <Link
+              href="/chat"
+              className="px-3 py-2 inline-block text-center text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:border-gray-300"
+            >
+              <i className="text-gray-400 w-5 fa fa-comments"></i>
+              <span className="hidden lg:inline ml-1">{t("Chat")}</span>
+            </Link>
+
             <Link
               href="/cart"
               className="px-3 py-2 inline-block text-center text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:border-gray-300"
             >
               <i className="text-gray-400 w-5 fa fa-shopping-cart"></i>
               <span className="hidden lg:inline ml-1">
-                Cart (<b>{cartItems?.length || 0}</b>)
+                {t("Cart")} (<b>{cartItems?.length || 0}</b>)
               </span>
             </Link>
 
@@ -58,7 +69,7 @@ const Header = () => {
                 className="px-3 py-2 inline-block text-center text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:border-gray-300"
               >
                 <i className="text-gray-400 w-5 fa fa-user"></i>
-                <span className="hidden lg:inline ml-1">Sign in</span>
+                <span className="hidden lg:inline ml-1">{t("Sign in")}</span>
               </Link>
             ) : (
               <a
