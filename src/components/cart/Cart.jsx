@@ -143,8 +143,6 @@ const Cart = () => {
                           </a>
                         </div>
                       </div>
-
-                      <hr className="my-4" />
                     </div>
                   ))}
                 </article>
