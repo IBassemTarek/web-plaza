@@ -96,7 +96,7 @@ export const AuthProvider = ({ children }) => {
 
       if (data?.address) {
         setUpdated(true);
-        router.replace(`/address/${id}`);
+        router.push("/me");
       }
     } catch (error) {
       setError(error?.response?.data?.message);

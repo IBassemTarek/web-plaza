@@ -6,6 +6,7 @@ import CartContext from "@/context/CartContext";
 import { useSearchParams, useRouter } from "next/navigation";
 import ProtectRoute from "../auth/ProtectRoute";
 import { useLocale } from "@/context/LocaleContext";
+
 const ListOrders = ({ orders }) => {
   const { clearCart } = useContext(CartContext);
   const params = useSearchParams();
